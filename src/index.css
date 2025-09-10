@@ -1,0 +1,64 @@
+/* Import Design System - Colors and Typography Only */
+@import './styles/design-system/variables.css';
+
+/* Import Component Styles */
+@import './styles/components/navbar.css';
+@import './styles/components/footer.css';
+@import './styles/components/registration.css';
+@import './styles/components/login-modal.css';
+
+
+.hero-section{
+    background-image: url('../src/assets/hero-bg.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 14px;
+    padding: 3rem 4rem;
+    margin-top: auto;
+}
+
+.hero-section h4, .hero-section h1{
+    text-transform: capitalize;
+    color: var(--white-50);
+}
+
+.trust-tag{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: #ffffff20;
+    padding: 0.5rem 1rem;
+    width: fit-content;
+    border-radius: 32px;
+    margin-top: 1rem;
+    border: 1px solid var(--violet-300);
+}
+
+.trust-tag .trust-tag-content h5 , .trust-tag .trust-tag-content p{
+    font-size: 12px;
+}
+
+.about-section{
+    background-color: var(--violet-500);
+    padding: 3rem 4rem;
+}
+
+.line{
+    height: 1px;
+    border-radius: 12px;
+    width: 28px;
+    background-color: var(--warning-500);
+    margin-bottom: 24px;
+}
+
+.professional-section .container{
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: var(--warning-500);
+}
+
+.professional-section .professional-content{
+    background-color: var(--warning-500);
+    padding: 3rem 4rem;
+}   
