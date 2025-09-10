@@ -4,6 +4,7 @@ import about from "../assets/about.png";
 import professional from "../assets/professional.png";
 import background from "../assets/section-img.jpg";
 import infograph from "../assets/infographic.svg";
+import servicesIcon1 from "../assets/service-icon-1.svg";
 
 const Home = () => {
   return (
@@ -27,7 +28,21 @@ const Home = () => {
       </div>
 
       <div className="container wrapper">
-        <img src={infograph} className="img-fluid m-auto" alt="infograph" />
+        <div className="services-section text-center">
+          <img src={infograph} className="img-fluid m-auto" alt="infograph" />
+          <img src={servicesIcon1} alt="services-icon-1" className="services-icon services-icon-1" />
+          <img src={servicesIcon1} alt="services-icon-2" className="services-icon services-icon-2" />
+          <img src={servicesIcon1} alt="services-icon-3" className="services-icon services-icon-3" />
+          <img src={servicesIcon1} alt="services-icon-4" className="services-icon services-icon-4" />
+          <img src={servicesIcon1} alt="services-icon-5" className="services-icon services-icon-5" />
+          <img src={servicesIcon1} alt="services-icon-6" className="services-icon services-icon-6" />
+          <img src={servicesIcon1} alt="services-icon-7" className="services-icon services-icon-7" />
+          <img src={servicesIcon1} alt="services-icon-8" className="services-icon services-icon-8" />
+          <img src={servicesIcon1} alt="services-icon-9" className="services-icon services-icon-9" />
+          <img src={servicesIcon1} alt="services-icon-10" className="services-icon services-icon-10" />
+          <img src={servicesIcon1} alt="services-icon-11" className="services-icon services-icon-11" />
+          <img src={servicesIcon1} alt="services-icon-12" className="services-icon services-icon-12" />
+        </div>
       </div>
 
       <div className="about-section wrapper pb-0">
