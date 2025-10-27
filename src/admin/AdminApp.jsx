@@ -7,6 +7,7 @@ import ProfileServices from './pages/ProfileServices';
 import './design-system/variables.css';
 import './design-system/base.css';
 import './styles/pages.css';
+import logo from '../assets/logo.svg';
 
 // Default navigation configuration
 const defaultNavigationItems = [
@@ -56,7 +57,7 @@ const defaultNavigationItems = [
 
 const AdminApp = ({ 
   navigationItems = defaultNavigationItems,
-  logo = "/src/assets/logo.svg",
+  logo: logoProp = logo,
   companyName = "INFLUERE",
   tagline = "Collaborate With Professionals",
   userName = "Sonam",
@@ -69,7 +70,7 @@ const AdminApp = ({
         <Route path="/" element={
           <AdminLayout 
             navigationItems={navigationItems}
-            logo={logo}
+            logo={logoProp}
             companyName={companyName}
             tagline={tagline}
             userName={userName}
@@ -83,7 +84,7 @@ const AdminApp = ({
         <Route path="/dashboard" element={
           <AdminLayout 
             navigationItems={navigationItems}
-            logo={logo}
+            logo={logoProp}
             companyName={companyName}
             tagline={tagline}
             userName={userName}

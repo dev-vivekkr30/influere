@@ -3,10 +3,11 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import './AdminLayout.css';
+import logo from '../../assets/logo.svg';
 
 const AdminLayout = ({ 
   navigationItems = [],
-  logo = "/src/assets/logo.svg",
+  logo: logoProp = logo,
   companyName = "INFLUERE",
   tagline = "Collaborate With Professionals",
   userName = "Sonam",
@@ -44,7 +45,7 @@ const AdminLayout = ({
         collapsed={sidebarCollapsed}
         onToggle={toggleSidebar}
         navigationItems={navigationItems}
-        logo={logo}
+        logo={logoProp}
         companyName={companyName}
         tagline={tagline}
       />

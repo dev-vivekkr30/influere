@@ -31,7 +31,7 @@
 
 /* Setup Card */
 .welcome-setup-card {
-  background-image: url('/src/assets/welcome-banner.svg');
+  background-image: url('../../assets/welcome-banner.svg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

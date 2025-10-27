@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import './Sidebar.css';
+import logo from '../../assets/logo.svg';
 
 const Sidebar = ({ 
   collapsed = false, 
   onToggle, 
   navigationItems = [],
-  logo = "/src/assets/logo.svg",
+  logo: logoProp = logo,
   companyName = "INFLUERE",
   tagline = "Collaborate With Professionals"
 }) => {
@@ -96,7 +97,7 @@ const Sidebar = ({
         {!collapsed && (
           <div className="admin-logo">
             <img 
-              src={logo} 
+              src={logoProp} 
               alt={companyName}
               className="admin-logo-img"
             />
@@ -105,7 +106,7 @@ const Sidebar = ({
         {collapsed && (
           <div className="admin-logo-collapsed">
             <img 
-              src={logo} 
+              src={logoProp} 
               alt={companyName}
               className="admin-logo-img"
             />

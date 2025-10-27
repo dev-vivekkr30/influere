@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './WelcomeScreen.css';
+import cardIcon from '../../assets/card-icon.svg';
 
 const WelcomeScreen = ({ userName = "Sonam" }) => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const WelcomeScreen = ({ userName = "Sonam" }) => {
           <div className="feature-card">
             <div className="feature-card-icon">
               <img 
-                src="/src/assets/card-icon.svg" 
+                src={cardIcon} 
                 alt="Profile Buy or Sell Icon"
                 className="feature-icon-img"
               />
@@ -75,7 +76,7 @@ const WelcomeScreen = ({ userName = "Sonam" }) => {
           <div className="feature-card">
             <div className="feature-card-icon">
               <img 
-                src="/src/assets/card-icon.svg" 
+                src={cardIcon} 
                 alt="Discount & Offer Icon"
                 className="feature-icon-img"
               />
