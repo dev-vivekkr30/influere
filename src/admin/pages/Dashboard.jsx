@@ -17,24 +17,8 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import "./Dashboard.css";
-
-// Import images with placeholders
-const followersIcon = "/src/assets/follow-icon.svg";
-const unfollowersIcon = "/src/assets/unfollow-icon.svg";
-const editIcon = "/src/assets/edit-icon.svg";
-const profileImage = "/src/assets/profile-image.png";
-const searchIcon = "/src/assets/search-icon.svg";
-const filterIcon = "/src/assets/filter-icon.svg";
-const facebookIcon = "/src/assets/facebook-icon.svg";
-const instagramIcon = "/src/assets/instagram-icon.svg";
-const linkedinIcon = "/src/assets/linkedin-icon.svg";
-const pinterestIcon = "/src/assets/pinterest-icon.svg";
-const telegramIcon = "/src/assets/telegram-icon.svg";
-const tiktokIcon = "/src/assets/tiktok-icon.svg";
-const twitchIcon = "/src/assets/twitch-icon.svg";
-const twitterIcon = "/src/assets/twitter-icon.svg";
-const youtubeIcon = "/src/assets/youtube-icon.svg";
-const spotifyIcon = "/src/assets/spotify-icon.svg";
+import followIcon from "../../assets/follow-icon.svg";
+import unfollowIcon from "../../assets/unfollow-icon.svg";
 
 const Dashboard = () => {
   const [timeframe, setTimeframe] = useState("days");
@@ -195,7 +179,7 @@ const Dashboard = () => {
           <div className="dashboard-metrics">
             <div className="metric-card followers-card">
               <div className="metric-icon">
-                <img src={followersIcon} alt="Followers" />
+                <img src={followIcon} alt="Followers" />
               </div>
               <div className="metric-content">
                 <h3 className="metric-title d-flex align-items-center gap-2">
@@ -211,7 +195,7 @@ const Dashboard = () => {
 
             <div className="metric-card unfollowers-card">
               <div className="metric-icon">
-                <img src={unfollowersIcon} alt="Unfollowers" />
+                <img src={unfollowIcon} alt="Unfollowers" />
               </div>
               <div className="metric-content">
                 <h3 className="metric-title d-flex align-items-center gap-2">Total Unfollowers
@@ -279,14 +263,12 @@ const Dashboard = () => {
         <div className="col-md-5">
           {/* Profile Card */}
           <div className="dashboard-profile-card">
-            <div className="profile-header">
-              <button className="edit-btn">
-                <img src={editIcon} alt="Edit" />
-              </button>
-            </div>
+        <div className="profile-header">
+          <button className="edit-btn">✏️</button>
+        </div>
             <div className="profile-content">
               <div className="profile-image">
-                <img src={profileImage} alt="Sonam Kumari" />
+                <div className="profile-avatar">SK</div>
               </div>
               <div className="profile-info">
                 <div className="profile-name">
@@ -307,16 +289,9 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="social-icons">
-              <img src={facebookIcon} alt="Facebook" />
-              <img src={instagramIcon} alt="Instagram" />
-              <img src={linkedinIcon} alt="LinkedIn" />
-              <img src={pinterestIcon} alt="Pinterest" />
-              <img src={telegramIcon} alt="Telegram" />
-              <img src={tiktokIcon} alt="TikTok" />
-              <img src={twitchIcon} alt="Twitch" />
-              <img src={twitterIcon} alt="Twitter" />
-              <img src={youtubeIcon} alt="YouTube" />
-              <img src={spotifyIcon} alt="Spotify" />
+              <img src="/src/assets/facebook.svg" alt="Facebook" />
+              <img src="/src/assets/insta.svg" alt="Instagram" />
+              <img src="/src/assets/linkedin.svg" alt="LinkedIn" />
             </div>
           </div>
         </div>
@@ -331,7 +306,7 @@ const Dashboard = () => {
 
         <div className="table-controls">
           <div className="search-box">
-            <img src={searchIcon} alt="Search" />
+            <span>🔍</span>
             <input
               type="text"
               placeholder="Search..."
@@ -340,7 +315,7 @@ const Dashboard = () => {
             />
           </div>
           <button className="filter-btn">
-            <img src={filterIcon} alt="Filter" />
+            🔽
           </button>
         </div>
 
