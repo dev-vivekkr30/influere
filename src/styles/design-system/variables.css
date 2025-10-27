@@ -174,15 +174,18 @@ h6 {
 
 /* Paragraph */
 p {
+  font-family: var(--font-family-primary);
   margin: 0 0 1rem 0;
 }
 
 p:last-child {
+  font-family: var(--font-family-primary);
   margin-bottom: 0;
 }
 
 /* Links */
 a {
+  font-family: var(--font-family-primary);
   color: var(--color-primary-600);
   text-decoration: none;
   transition: color 0.15s ease-in-out;

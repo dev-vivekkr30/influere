@@ -1,0 +1,288 @@
+/* Admin Sidebar Styles */
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: var(--admin-white-50);
+  color: var(--admin-text-sidebar);
+  z-index: var(--admin-z-fixed);
+  transition: width var(--admin-transition-base);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--admin-gray-50);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.admin-sidebar.collapsed {
+  width: var(--admin-sidebar-collapsed) !important;
+}
+
+/* Sidebar Header */
+.admin-sidebar-header {
+  padding: 12px;
+  border-bottom: 1px solid var(--admin-gray-50);
+  min-height: var(--admin-header-height);
+  display: flex;
+  align-items: center;
+}
+
+.admin-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-space-3);
+  color: var(--admin-text-primary);
+  text-decoration: none;
+}
+
+.admin-logo-img {
+  width: 100%;
+  height: 2.5rem;
+  object-fit: contain;
+  border-radius: var(--admin-radius-md);
+}
+
+.admin-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-logo-name {
+  font-size: var(--admin-font-size-lg);
+  font-weight: var(--admin-font-weight-bold);
+  color: var(--admin-text-primary);
+  line-height: var(--admin-line-height-tight);
+}
+
+.admin-logo-tagline {
+  font-size: var(--admin-font-size-xs);
+  color: var(--admin-text-secondary);
+  font-weight: var(--admin-font-weight-normal);
+  line-height: var(--admin-line-height-normal);
+}
+
+.admin-logo-collapsed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-logo-collapsed .admin-logo-img {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Sidebar Navigation */
+.admin-sidebar-nav {
+  flex: 1;
+  padding: 12px 0;
+  overflow-y: auto;
+}
+
+.admin-nav-item {
+  margin-bottom: var(--admin-space-1);
+}
+
+.admin-nav-link {
+  display: block;
+  padding: 12px;
+  color: var(--admin-gray-400);
+  text-decoration: none;
+  transition: all var(--admin-transition-base);
+  position: relative;
+  border-radius: 0;
+  margin: 0px 12px;
+  border-radius: var(--admin-radius-md);
+}
+
+.admin-nav-link:hover {
+  background-color: var(--admin-white-500);
+  color: var(--admin-gray-900);
+  text-decoration: none;
+}
+
+.admin-nav-link.active {
+  background-color: var(--admin-bg-sidebar-active);
+  color: var(--admin-text-sidebar-active);
+}
+
+.admin-nav-link.has-active-child {
+  background-color: var(--admin-primary-50);
+  color: var(--admin-primary-700);
+}
+
+.admin-nav-link-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-nav-icon {
+  font-size: var(--admin-font-size-lg);
+  min-width: 1.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+
+.admin-nav-label {
+  flex: 1;
+  font-size: var(--admin-font-size-sm);
+  font-weight: var(--admin-font-weight-medium);
+}
+
+.admin-nav-arrow {
+  font-size: var(--admin-font-size-xs);
+  transition: transform var(--admin-transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-nav-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+/* Sub-menu Styles */
+.admin-nav-children {
+  background-color: var(--admin-white-200);
+  margin-top: 6px;
+  border-radius: var(--admin-radius-md);
+  margin-left: var(--admin-space-3);
+  margin-right: var(--admin-space-3);
+  padding: var(--admin-space-2);
+}
+
+.admin-nav-children .admin-nav-link {
+  margin: 0;
+  padding: 12px;
+  font-size: var(--admin-font-size-sm);
+}
+
+.admin-nav-children .admin-nav-link:hover {
+  background-color: var(--admin-white-500);
+  color: var(--admin-gray-900);
+}
+
+.admin-nav-children .admin-nav-link.active {
+  background-color: var(--admin-white-600);
+  color: var(--admin-primary-800);
+}
+
+/* Sidebar Footer */
+.admin-sidebar-footer {
+  padding: var(--admin-space-6);
+  border-top: 1px solid var(--admin-gray-200);
+}
+
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-space-3);
+}
+
+.admin-user-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--admin-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--admin-primary-100);
+  color: var(--admin-primary-700);
+  font-size: var(--admin-font-size-xl);
+  border: 2px solid var(--admin-primary-200);
+}
+
+.admin-user-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-user-name {
+  font-size: var(--admin-font-size-sm);
+  font-weight: var(--admin-font-weight-medium);
+  color: var(--admin-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-user-role {
+  font-size: var(--admin-font-size-xs);
+  color: var(--admin-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-user-avatar-collapsed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-user-avatar-collapsed i {
+  font-size: var(--admin-font-size-2xl);
+  color: var(--admin-primary-700);
+  background-color: var(--admin-primary-100);
+  border-radius: var(--admin-radius-full);
+  padding: var(--admin-space-2);
+  border: 2px solid var(--admin-primary-200);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--admin-transition-base);
+  }
+  
+  .admin-sidebar:not(.collapsed) {
+    transform: translateX(0);
+  }
+  
+  .admin-sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+}
+
+/* Scrollbar Styles */
+.admin-sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-track {
+  background: var(--admin-gray-100);
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-thumb {
+  background: var(--admin-gray-300);
+  border-radius: var(--admin-radius-full);
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--admin-gray-400);
+}
+
+/* Animation for sidebar toggle */
+.admin-sidebar {
+  transition: width var(--admin-transition-base);
+}
+
+.admin-sidebar.collapsed .admin-nav-label,
+.admin-sidebar.collapsed .admin-logo-text,
+.admin-sidebar.collapsed .admin-user-details {
+  opacity: 0;
+  transition: opacity var(--admin-transition-fast);
+}
+
+.admin-sidebar:not(.collapsed) .admin-nav-label,
+.admin-sidebar:not(.collapsed) .admin-logo-text,
+.admin-sidebar:not(.collapsed) .admin-user-details {
+  opacity: 1;
+  transition: opacity var(--admin-transition-base);
+}
