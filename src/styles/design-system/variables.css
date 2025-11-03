@@ -186,7 +186,7 @@ p:last-child {
 /* Links */
 a {
   font-family: var(--font-family-primary);
-  color: var(--color-primary-600);
+  /* color: var(--color-primary-600); */
   text-decoration: none;
   transition: color 0.15s ease-in-out;
 }

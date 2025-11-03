@@ -137,3 +137,11 @@
 .admin-transition-slow {
   transition: var(--admin-transition-slow);
 }
+
+
+.dropdown-item{
+  font-size: 12px;
+}
+.dropdown-item:hover{
+  text-decoration: none;
+}

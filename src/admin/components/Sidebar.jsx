@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 import logo from '../../assets/logo.svg';
+import PremiumModal from './PremiumModal';
 
 const Sidebar = ({ 
   collapsed = false, 
@@ -12,7 +13,11 @@ const Sidebar = ({
   tagline = "Collaborate With Professionals"
 }) => {
   const [expandedItems, setExpandedItems] = useState(new Set());
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const location = useLocation();
+
+  // Define premium feature IDs
+  const premiumFeatures = ['professional-consultancy', 'collaboration'];
 
   const toggleExpanded = (itemId) => {
     const newExpanded = new Set(expandedItems);
@@ -43,6 +48,44 @@ const Sidebar = ({
     const isExpanded = expandedItems.has(item.id);
     const isActive = isItemActive(item);
     const hasActiveChildItem = hasActiveChild(item);
+    const isPremium = premiumFeatures.includes(item.id);
+
+    const handleClick = (e) => {
+      if (isPremium) {
+        e.preventDefault();
+        setShowPremiumModal(true);
+        return;
+      }
+      if (hasChildren) {
+        toggleExpanded(item.id);
+      }
+    };
+
+    // For premium items, render as a button instead of NavLink
+    if (isPremium) {
+      return (
+        <div key={item.id} className="admin-nav-item">
+          <button
+            className="admin-nav-link admin-nav-link-premium"
+            onClick={handleClick}
+          >
+            <div className="admin-nav-link-content">
+              <span className="admin-nav-icon">
+                <i className={`bi bi-${item.icon}`}></i>
+              </span>
+              {!collapsed && (
+                <>
+                  <span className="admin-nav-label">{item.label}</span>
+                  <span className="premium-badge">
+                    <i className="bi bi-lock-fill"></i>
+                  </span>
+                </>
+              )}
+            </div>
+          </button>
+        </div>
+      );
+    }
 
     return (
       <div key={item.id} className="admin-nav-item">
@@ -53,11 +96,7 @@ const Sidebar = ({
               hasActiveChildItem ? 'has-active-child' : ''
             }`
           }
-          onClick={() => {
-            if (hasChildren) {
-              toggleExpanded(item.id);
-            }
-          }}
+          onClick={handleClick}
         >
           <div className="admin-nav-link-content">
             <span className="admin-nav-icon">
@@ -86,40 +125,48 @@ const Sidebar = ({
   };
 
   return (
-    <aside 
-      className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}
-      style={{ 
-        width: collapsed ? 'var(--admin-sidebar-collapsed)' : 'var(--admin-sidebar-width)' 
-      }}
-    >
-      {/* Sidebar Header */}
-      <div className="admin-sidebar-header">
-        {!collapsed && (
-          <div className="admin-logo">
-            <img 
-              src={logoProp} 
-              alt={companyName}
-              className="admin-logo-img"
-            />
-          </div>
-        )}
-        {collapsed && (
-          <div className="admin-logo-collapsed">
-            <img 
-              src={logoProp} 
-              alt={companyName}
-              className="admin-logo-img"
-            />
-          </div>
-        )}
-      </div>
+    <>
+      <aside 
+        className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}
+        style={{ 
+          width: collapsed ? 'var(--admin-sidebar-collapsed)' : 'var(--admin-sidebar-width)' 
+        }}
+      >
+        {/* Sidebar Header */}
+        <div className="admin-sidebar-header">
+          {!collapsed && (
+            <div className="admin-logo">
+              <img 
+                src={logoProp} 
+                alt={companyName}
+                className="admin-logo-img"
+              />
+            </div>
+          )}
+          {collapsed && (
+            <div className="admin-logo-collapsed">
+              <img 
+                src={logoProp} 
+                alt={companyName}
+                className="admin-logo-img"
+              />
+            </div>
+          )}
+        </div>
 
-      {/* Sidebar Navigation */}
-      <nav className="admin-sidebar-nav">
-        {navigationItems.map(item => renderNavItem(item))}
-      </nav>
+        {/* Sidebar Navigation */}
+        <nav className="admin-sidebar-nav">
+          {navigationItems.map(item => renderNavItem(item))}
+        </nav>
 
-    </aside>
+      </aside>
+
+      {/* Premium Modal */}
+      <PremiumModal 
+        show={showPremiumModal} 
+        onClose={() => setShowPremiumModal(false)} 
+      />
+    </>
   );
 };
 

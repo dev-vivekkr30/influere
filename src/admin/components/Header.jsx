@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
 const Header = ({ 
@@ -6,9 +7,14 @@ const Header = ({
   userAvatar = null
 }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const navigate = useNavigate();
 
   const toggleUserDropdown = () => {
     setShowUserDropdown(!showUserDropdown);
+  };
+
+  const handleWalletClick = () => {
+    navigate('/admin/wallet');
   };
 
   return (
@@ -21,7 +27,11 @@ const Header = ({
       {/* Right Section - Icons and User */}
       <div className="admin-header-right">
         {/* Wallet Icon */}
-        <button className="admin-header-icon-btn" aria-label="Wallet">
+        <button 
+          className="admin-header-icon-btn" 
+          aria-label="Wallet"
+          onClick={handleWalletClick}
+        >
           <i className="bi bi-wallet2"></i>
         </button>
 

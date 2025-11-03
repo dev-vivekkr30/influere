@@ -3,9 +3,12 @@ import { Routes, Route } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
 import WelcomeScreen from './pages/WelcomeScreen';
 import Dashboard from './pages/Dashboard';
+import Wallet from './pages/Wallet';
+import WithdrawConfirm from './pages/WithdrawConfirm';
 import ProfileServices from './pages/ProfileServices';
 import './design-system/variables.css';
 import './design-system/base.css';
+import './design-system/components.css';
 import './styles/pages.css';
 import logo from '../assets/logo.svg';
 
@@ -98,6 +101,21 @@ const AdminApp = ({
           <Route path="profile-services/discount-offers" element={<ProfileServices />} />
           <Route path="consultancy" element={<ProfileServices />} />
           <Route path="collaboration" element={<ProfileServices />} />
+        </Route>
+
+        {/* Wallet Route (separate from dashboard) */}
+        <Route path="/wallet" element={
+          <AdminLayout 
+            navigationItems={navigationItems}
+            logo={logoProp}
+            companyName={companyName}
+            tagline={tagline}
+            userName={userName}
+            userAvatar={userAvatar}
+          />
+        }>
+          <Route index element={<Wallet />} />
+          <Route path="withdraw-confirm" element={<WithdrawConfirm />} />
         </Route>
       </Routes>
     </div>

@@ -20,6 +20,7 @@
   align-items: center;
   gap: 8px;
   font-size: var(--font-size-sm);
+  color: var(--gray-600);
 }
 
 .footer .footer-bottom{
