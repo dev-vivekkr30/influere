@@ -3,7 +3,7 @@ import consultancyData from './consultancyData';
 export const collaborationProfiles = [
   {
     id: 'suryoday-bank-1',
-    name: 'Suryoday Bank',
+    name: 'Sarah Johnson',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '869k',
     rating: 4.5,
@@ -19,7 +19,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'suryoday-bank-2',
-    name: 'Suryoday Bank',
+    name: 'Michael Chen',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '869k',
     rating: 4.5,
@@ -35,7 +35,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'suryoday-bank-3',
-    name: 'Suryoday Bank',
+    name: 'Emily Rodriguez',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '869k',
     rating: 4.5,
@@ -49,7 +49,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-4',
-    name: 'Tech Innovators',
+    name: 'David Kim',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '1.2M',
     rating: 4.8,
@@ -65,7 +65,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-5',
-    name: 'Fashion Forward',
+    name: 'Sophie Williams',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '650k',
     rating: 4.6,
@@ -80,7 +80,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-6',
-    name: 'Fitness Enthusiasts',
+    name: 'James Anderson',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '950k',
     rating: 4.7,
@@ -95,7 +95,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-7',
-    name: 'Food & Travel',
+    name: 'Maria Garcia',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '780k',
     rating: 4.4,
@@ -110,7 +110,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-8',
-    name: 'Business Leaders',
+    name: 'Robert Taylor',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '1.5M',
     rating: 4.9,
@@ -126,7 +126,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-9',
-    name: 'Gaming Community',
+    name: 'Alex Thompson',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '1.8M',
     rating: 4.8,
@@ -141,7 +141,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-10',
-    name: 'Lifestyle Bloggers',
+    name: 'Lisa Martinez',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '520k',
     rating: 4.3,

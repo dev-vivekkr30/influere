@@ -6,7 +6,7 @@ import indianFlag from '../../assets/indian-flag.svg';
 const sharedProfessionals = [
   {
     id: 'suryoday-bank',
-    name: 'Suryoday Bank',
+    name: 'Rajesh Kumar',
     flagIcon: indianFlag,
     avatar: consultantAvatar1,
     reach: '869K Reach',
@@ -41,7 +41,7 @@ const sharedProfessionals = [
   },
   {
     id: 'wealth-elite',
-    name: 'Wealth Elite',
+    name: 'Priya Sharma',
     flagIcon: indianFlag,
     avatar: consultantAvatar2,
     reach: '650K Reach',
