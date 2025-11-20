@@ -80,10 +80,63 @@
   accent-color: var(--admin-primary-600);
 }
 
+.collaboration-selection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 16px; */
+}
+
 .collaboration-selection-count {
   font-size: 14px;
   color: var(--admin-gray-600);
   font-weight: 500;
+}
+
+.collaboration-show-shortlisted-btn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--admin-gray-900);
+  color: var(--admin-white-500);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.collaboration-show-shortlisted-btn:hover {
+  background-color: var(--admin-primary-800);
+}
+
+.collaboration-show-shortlisted-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.collaboration-show-shortlisted-btn:disabled:hover {
+  background-color: var(--admin-gray-900);
+}
+
+.collaboration-back-link {
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.collaboration-back-link:hover {
+  color: var(--admin-primary-600);
+  text-decoration: underline;
+}
+
+.collaboration-back-link i {
+  font-size: 14px;
 }
 
 .collaboration-card {
@@ -92,9 +145,67 @@
   border: 1px solid var(--admin-gray-50);
 }
 
+.collaboration-card.with-actions {
+  cursor: default;
+}
+
 .collaboration-card.selected {
   border-color: var(--admin-primary-500);
   border-width: 1px;
+}
+
+.collaboration-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.collaboration-action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.collaboration-action-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--admin-gray-900);
+  color: var(--admin-white-500);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.collaboration-action-btn:hover {
+  background-color: var(--admin-primary-800);
+}
+
+.collaboration-message-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--admin-gray-200);
+  background-color: var(--admin-white-500);
+  color: var(--admin-gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.collaboration-message-btn:hover {
+  background-color: var(--admin-gray-50);
+  border-color: var(--admin-gray-300);
+  color: var(--admin-primary-600);
+}
+
+.collaboration-message-btn i {
+  font-size: 18px;
 }
 
 @media (max-width: 768px) {
@@ -110,6 +221,16 @@
 
   .collaboration-filter-dropdowns .consultancy-filter {
     flex: 1;
+  }
+
+  .collaboration-selection-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .collaboration-show-shortlisted-btn {
+    width: 100%;
   }
 }
 

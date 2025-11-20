@@ -15,6 +15,7 @@ import SettingsPage from './pages/SettingsPage';
 import ConsultancyCategoryPage from './pages/ConsultancyCategoryPage';
 import CollaborationSetup from './pages/CollaborationSetup';
 import CollaborationPage from './pages/CollaborationPage';
+import CollaborationShortlisted from './pages/CollaborationShortlisted';
 import './design-system/variables.css';
 import './design-system/base.css';
 import './design-system/components.css';
@@ -154,6 +155,7 @@ const AdminApp = ({
           <Route path="collaboration" element={<Navigate to="/dashboard/collaboration/setup" replace />} />
           <Route path="collaboration/setup" element={<CollaborationSetup />} />
           <Route path="collaboration/list" element={<CollaborationPage />} />
+          <Route path="collaboration/shortlisted" element={<CollaborationShortlisted />} />
           <Route path="collaboration-premium" element={<ProfileServices />} />
         </Route>
         
