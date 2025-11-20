@@ -18,7 +18,7 @@ const Header = ({
   };
 
   const handleEditProfileClick = () => {
-    navigate('/dashboard/my-profile/edit');
+    navigate('/dashboard/settings?tab=profile');
     setShowUserDropdown(false);
   };
 

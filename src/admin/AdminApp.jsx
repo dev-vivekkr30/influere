@@ -10,7 +10,6 @@ import ProfileSell from './pages/ProfileSell';
 import ProfileBuy from './pages/ProfileBuy';
 import ProfileFake from './pages/ProfileFake';
 import DiscountOffers from './pages/DiscountOffers';
-import ProfileEdit from './pages/ProfileEdit';
 import TransactionHistory from './pages/TransactionHistory';
 import SettingsPage from './pages/SettingsPage';
 import ConsultancyCategoryPage from './pages/ConsultancyCategoryPage';
@@ -90,13 +89,13 @@ const defaultNavigationItems = [
   {
     id: 'professional-consultancy-premium',
     label: 'Professional Consultancy',
-    icon: 'file-earmark-text',
+    icon: 'people',
     path: '/dashboard/consultancy',
   },
   {
     id: 'collaboration',
     label: 'Collaboration',
-    icon: 'handshake',
+    icon: 'file-earmark-text',
     path: '/dashboard/collaboration',
     children: [
       {
@@ -147,8 +146,6 @@ const AdminApp = ({
           <Route path="profile-services/buy-sell" element={<ProfileSell />} />
           <Route path="profile-services/buy-profile" element={<ProfileBuy />} />
           <Route path="profile-services/discount-offers" element={<DiscountOffers />} />
-          <Route path="my-profile" element={<Navigate to="/dashboard/my-profile/edit" replace />} />
-          <Route path="my-profile/edit" element={<ProfileEdit />} />
           <Route path="my-profile/transaction-history" element={<TransactionHistory />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="professional-consultancy" element={<ConsultancyCategoryPage />} />

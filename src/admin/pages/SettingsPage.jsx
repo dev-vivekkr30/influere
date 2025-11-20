@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import profilePlatforms from "../data/profilePlatforms";
 import transactionHistoryRows from "../data/transactionHistoryData";
+import photoPlaceholder from "../../assets/photo-placeholder.png";
 import "../components/ConsultancyModals.css";
 import "./DiscountOffers.css";
 import "./CollaborationSetup.css";
@@ -19,9 +21,19 @@ const settingsTabs = [
 
 const SettingsPage = () => {
   usePageTitle("Settings");
-  const [activeTab, setActiveTab] = useState("profile");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "profile");
   const [subscriptionTableTab, setSubscriptionTableTab] = useState("all");
   const [subscriptionSearchValue, setSubscriptionSearchValue] = useState("");
+  const [profilePicture, setProfilePicture] = useState(null);
+
+  // Update active tab when URL param changes
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
 
   // ID types by region (from VerifyIdentity)
   const idTypesByRegion = {
@@ -227,8 +239,48 @@ const SettingsPage = () => {
     });
   };
 
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePicture(file);
+    }
+  };
+
   const renderProfileTab = () => (
     <form className="collaboration-setup-form" onSubmit={handleSubmit}>
+      {/* Profile Picture Section */}
+      <div className="setting-card">
+        <div className="setting-card-left">
+          <p className="step-card-title">Profile Picture</p>
+          <p className="step-card-description">
+            Upload your profile picture to personalize your account
+          </p>
+        </div>
+        <div className="setting-card-right">
+          <div className="profile-picture-row">
+            <div className="profile-picture-placeholder">
+              <img 
+                src={profilePicture ? URL.createObjectURL(profilePicture) : photoPlaceholder} 
+                alt="Profile placeholder" 
+              />
+            </div>
+            <div className="profile-picture-upload">
+              <p>No Profile Picture Uploaded</p>
+              <label className="form-input-group profile-upload-field">
+                <input 
+                  type="file" 
+                  hidden 
+                  accept="image/*"
+                  onChange={handleProfilePictureChange}
+                />
+                <span>Upload</span>
+                <i className="bi bi-paperclip"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="setting-card">
         <div className="setting-card-left">
           <p className="step-card-title">First Name</p>
@@ -1052,7 +1104,10 @@ const SettingsPage = () => {
                 <button
                   key={tab.id}
                   className={`tab-btn ${activeTab === tab.id ? "active" : ""}`}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    setSearchParams({ tab: tab.id });
+                  }}
                 >
                   {tab.label}
                 </button>
