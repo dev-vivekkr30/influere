@@ -1,11 +1,26 @@
-import zoom from '../../assets/zoom.svg';
-const VideoCall = ({ formData, onFormDataChange, onNext, onBack, isFirstStep, isLastStep }) => {
+import zoom from "../../assets/zoom.svg";
+import "./VideoCall.css";
+
+const timeSlots = [
+  "09:00 AM",
+  "09:30 AM",
+  "10:00 AM",
+  "10:30 AM",
+  "11:00 AM",
+  "11:30 AM",
+  "12:00 PM",
+];
+
+const VideoCall = ({
+  formData,
+  onFormDataChange,
+  onNext,
+  onBack,
+  isFirstStep,
+  isLastStep,
+}) => {
   const handleInputChange = (field, value) => {
     onFormDataChange(field, value);
-  };
-
-  const handleCheckboxChange = (field, checked) => {
-    onFormDataChange(field, checked);
   };
 
   const handleSubmit = (e) => {
@@ -23,54 +38,68 @@ const VideoCall = ({ formData, onFormDataChange, onNext, onBack, isFirstStep, is
       </div>
 
       <form onSubmit={handleSubmit} className="registration-form">
-        <div className="video-options">
-          <label className="checkbox-label video-option">
+        <div className="video-options-grid">
+          <label
+            className={`video-option-tile ${
+              formData.videoMode === "zoom" ? "selected" : ""
+            }`}
+          >
             <input
-              type="checkbox"
-              className="checkbox-input"
-              checked={formData.videoMode === 'zoom'}
-              onChange={(e) => handleInputChange('videoMode', e.target.checked ? 'zoom' : '')}
+              type="radio"
+              name="videoMode"
+              value="zoom"
+              checked={formData.videoMode === "zoom"}
+              onChange={(e) => handleInputChange("videoMode", e.target.value)}
             />
-            <span className="checkbox-custom"></span>
             <div className="video-option-content">
               <div className="video-option-icon">
                 <img src={zoom} alt="Zoom" />
               </div>
-              <span className="video-option-text">Zoom</span>
+              <div>
+                <h3>Zoom</h3>
+                <p>Encrypted HD video calling with waiting room.</p>
+              </div>
             </div>
           </label>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="selectedDate" className="form-label">Select Date</label>
-            <div className="date-input-wrapper">
+        <div className="date-time-grid">
+          <div className="date-picker-card">
+            <div className="date-picker-header">
+              <h4>Select a date</h4>
+              <p>Pick a suitable date for the video call</p>
+            </div>
+            <div className="date-picker-input">
               <input
                 type="date"
                 id="selectedDate"
-                className="form-control"
                 value={formData.selectedDate}
-                onChange={(e) => handleInputChange('selectedDate', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("selectedDate", e.target.value)
+                }
                 required
               />
-              
             </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="selectedTime" className="form-label">Select Time</label>
-            <div className="time-input-wrapper">
-              <input
-                type="time"
-                id="selectedTime"
-                className="form-control"
-                value={formData.selectedTime}
-                onChange={(e) => handleInputChange('selectedTime', e.target.value)}
-                required
-              />
-              {/* <svg className="clock-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2"/>
-              </svg> */}
+
+          <div className="time-picker-card">
+            <div className="time-picker-header">
+              <h4>Select a time</h4>
+              <p>Choose an available slot</p>
+            </div>
+            <div className="time-slots-grid">
+              {timeSlots.map((slot) => (
+                <button
+                  type="button"
+                  key={slot}
+                  className={`time-slot ${
+                    formData.selectedTime === slot ? "selected" : ""
+                  }`}
+                  onClick={() => handleInputChange("selectedTime", slot)}
+                >
+                  {slot}
+                </button>
+              ))}
             </div>
           </div>
         </div>

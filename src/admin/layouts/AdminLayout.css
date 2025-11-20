@@ -24,7 +24,7 @@
 
 .admin-content-body {
   flex: 1;
-  background-color: var(--admin-bg-primary);
+  background-color: var(--admin-white-50);
   min-height: calc(100vh - var(--admin-header-height) - var(--admin-header-height));
 }
 

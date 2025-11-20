@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import usePageTitle from "../../hooks/usePageTitle";
 import walletIcon from "../../assets/wallet.svg";
 import successTopImg from "../../assets/success-top-img.svg";
 import {
@@ -32,6 +33,7 @@ ChartJS.register(
 );
 
 const Wallet = () => {
+  usePageTitle("Wallet");
   const navigate = useNavigate();
   const [timeframe, setTimeframe] = useState("days");
   const [activeTab, setActiveTab] = useState("all");
@@ -59,7 +61,7 @@ const Wallet = () => {
   // Handle withdraw next step
   const handleWithdrawNext = () => {
     setShowWithdrawModal(false);
-    navigate('/admin/wallet/withdraw-confirm', {
+    navigate('/dashboard/wallet/withdraw-confirm', {
       state: { withdrawAmount, selectedAccount }
     });
   };
@@ -492,7 +494,7 @@ const Wallet = () => {
                 className="btn-add-funds"
                 onClick={() => setShowAddFundsModal(true)}
               >
-                <i className="bi bi-plus-circle me-2"></i>Add Funds
+                Add Funds
               </button>
               <button 
                 className="btn-withdraw-funds"
@@ -627,7 +629,6 @@ const Wallet = () => {
                 <i className="bi bi-funnel"></i>
               </button>
               <div className="search-box">
-                <i className="bi bi-search"></i>
                 <input
                   type="text"
                   placeholder="Search..."

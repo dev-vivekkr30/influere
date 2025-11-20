@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import usePageTitle from "../../hooks/usePageTitle";
 import "./WithdrawConfirm.css";
 import successTopImg from "../../assets/success-top-img.svg";
 import failedTopImg from "../../assets/failed-top-img.svg";
 
 const WithdrawConfirm = () => {
+  usePageTitle("Withdraw Confirmation");
   const navigate = useNavigate();
   const location = useLocation();
   const [showOTPModal, setShowOTPModal] = useState(false);
@@ -80,7 +82,7 @@ const WithdrawConfirm = () => {
 
   const handleCloseSuccess = () => {
     setShowSuccessModal(false);
-    navigate('/admin/wallet');
+    navigate('/dashboard/wallet');
   };
 
   const handleCloseFailed = () => {

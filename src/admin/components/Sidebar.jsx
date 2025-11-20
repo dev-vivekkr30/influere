@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 import logo from '../../assets/logo.svg';
@@ -17,7 +17,7 @@ const Sidebar = ({
   const location = useLocation();
 
   // Define premium feature IDs
-  const premiumFeatures = ['professional-consultancy', 'collaboration'];
+  const premiumFeatures = ['professional-consultancy-premium', 'collaboration-premium'];
 
   const toggleExpanded = (itemId) => {
     const newExpanded = new Set(expandedItems);
@@ -49,6 +49,8 @@ const Sidebar = ({
     const isActive = isItemActive(item);
     const hasActiveChildItem = hasActiveChild(item);
     const isPremium = premiumFeatures.includes(item.id);
+    // Use 'end' prop for items with exact match or items with children
+    const shouldUseEnd = item.exact || hasChildren;
 
     const handleClick = (e) => {
       if (isPremium) {
@@ -57,6 +59,7 @@ const Sidebar = ({
         return;
       }
       if (hasChildren) {
+        e.preventDefault();
         toggleExpanded(item.id);
       }
     };
@@ -91,8 +94,9 @@ const Sidebar = ({
       <div key={item.id} className="admin-nav-item">
         <NavLink
           to={item.path}
+          end={shouldUseEnd}
           className={({ isActive: navIsActive }) => 
-            `admin-nav-link ${navIsActive || isActive ? 'active' : ''} ${
+            `admin-nav-link ${(navIsActive || isActive) && !hasActiveChildItem ? 'active' : ''} ${
               hasActiveChildItem ? 'has-active-child' : ''
             }`
           }
@@ -123,6 +127,22 @@ const Sidebar = ({
       </div>
     );
   };
+
+  useEffect(() => {
+    setExpandedItems(prev => {
+      const next = new Set(prev);
+      navigationItems.forEach(item => {
+        if (item.children && item.children.some(child => location.pathname.startsWith(child.path))) {
+          next.add(item.id);
+        }
+      });
+
+      if (next.size === prev.size && [...next].every(id => prev.has(id))) {
+        return prev;
+      }
+      return next;
+    });
+  }, [location.pathname, navigationItems]);
 
   return (
     <>

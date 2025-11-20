@@ -1,13 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import usePageTitle from '../../hooks/usePageTitle';
 import './WelcomeScreen.css';
 import cardIcon from '../../assets/card-icon.svg';
 
 const WelcomeScreen = ({ userName = "Sonam" }) => {
+  usePageTitle("Welcome");
   const navigate = useNavigate();
 
   const handleDashboardClick = () => {
-    navigate('/admin/dashboard');
+    navigate('/dashboard');
   };
 
   const handleUpdateProfile = () => {

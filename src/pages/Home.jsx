@@ -1,12 +1,26 @@
 import { Link } from "react-router-dom";
+import usePageTitle from "../hooks/usePageTitle";
 import trust from "../assets/people-img.svg";
 import about from "../assets/about.png";
 import professional from "../assets/professional.png";
 import background from "../assets/section-img.jpg";
 import infograph from "../assets/infographic.svg";
 import servicesIcon1 from "../assets/service-icon-1.svg";
+import hexagonCenter from "../assets/hexagon-center.svg";
+import serviceIcon from "../assets/icon.svg";
+import Icon2 from "../assets/icon-2.svg";
+import Icon3 from "../assets/icon-3.svg";
+import Icon4 from "../assets/icon-4.svg";
+import Icon5 from "../assets/icon-5.svg";
+import Icon6 from "../assets/icon-6.svg";
+import Icon7 from "../assets/icon-7.svg";
+import Icon8 from "../assets/icon-8.svg";
+import Icon9 from "../assets/icon-9.svg";
+import Icon10 from "../assets/icon-10.svg";
+import Icon11 from "../assets/icon-11.svg";
 
 const Home = () => {
+  usePageTitle("Home");
   return (
     <>
       <div className="container hero-section">
@@ -28,20 +42,159 @@ const Home = () => {
       </div>
 
       <div className="container wrapper">
-        <div className="services-section text-center">
-          <img src={infograph} className="img-fluid m-auto" alt="infograph" />
-          <img src={servicesIcon1} alt="services-icon-1" className="services-icon services-icon-1" />
-          <img src={servicesIcon1} alt="services-icon-2" className="services-icon services-icon-2" />
-          <img src={servicesIcon1} alt="services-icon-3" className="services-icon services-icon-3" />
-          <img src={servicesIcon1} alt="services-icon-4" className="services-icon services-icon-4" />
-          <img src={servicesIcon1} alt="services-icon-5" className="services-icon services-icon-5" />
-          <img src={servicesIcon1} alt="services-icon-6" className="services-icon services-icon-6" />
-          <img src={servicesIcon1} alt="services-icon-7" className="services-icon services-icon-7" />
-          <img src={servicesIcon1} alt="services-icon-8" className="services-icon services-icon-8" />
-          <img src={servicesIcon1} alt="services-icon-9" className="services-icon services-icon-9" />
-          <img src={servicesIcon1} alt="services-icon-10" className="services-icon services-icon-10" />
-          <img src={servicesIcon1} alt="services-icon-11" className="services-icon services-icon-11" />
-          <img src={servicesIcon1} alt="services-icon-12" className="services-icon services-icon-12" />
+        <div className="services-section text-center hexagon-section">
+          <img src={hexagonCenter} className="hexagon-center" alt="" />
+
+          <div
+            className="hex md"
+            role="img"
+            aria-label="Verified Profile Badge"
+          >
+            <div className="hex-content">
+              <img src={serviceIcon} className="icon" alt="" />
+              <h3>Verified Profile Badge</h3>
+              <div className="subtitle">
+                Get a unique ‘Verified Profile’ Badge to add to your online
+                profile in all social media platforms. Equivalent to the ‘blue
+                tick’ at a fraction of the cost over all your social media
+                accounts. This badge is a one-time label showing that you are an
+                authentic and trustworthy user of the site.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon2} className="icon" alt="" />
+              <h3>Profile Registration Number</h3>
+              <div className="subtitle">
+                Along with your ‘Verified Profile’ badge, get a registration
+                number assigned that can be traced back to a portal listing of
+                all verified registered members. Thus, giving you a legitimate
+                identity over fake and duplicate profiles.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon3} className="icon" alt="" />
+              <h3>Profile Buy/Sell</h3>
+              <div className="subtitle">
+                Repository of buyers and sellers to sell or buy your profile as
+                an asset.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon4} className="icon" alt="" />
+              <h3>Collaborate</h3>
+              <div className="subtitle">
+                Our most valued service for your growth. Use our repository to
+                connect with like minded creators. Use your credits to request
+                networking opportunities and cross promotion.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon11} className="icon" alt="" />
+              <h3>Action against Fake/Duplicate profiles</h3>
+              <div className="subtitle">
+                We use our extensive network of profiles to flag illegal, fake
+                and ransom fraudsters. Get advice on how to guard your profile
+                and your followers.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon8} className="icon" alt="" />
+              <h3>Legal Counsel</h3>
+              <div className="subtitle">
+                Get access to experienced and proficient legal team located in
+                your country of origin for any legal advice you might need or to
+                defend or represent you in case of legal liability. They can
+                help drafting contractual obligations and collaborative
+                agreements preparation with legal and strategic advice.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon9} className="icon" alt="" />
+              <h3>Tax Counsel</h3>
+              <div className="subtitle">
+                Get access to our Tax accountant team located in your country of
+                origin for local tax and investment advice. They can also file
+                your taxes and offer you investment and strategic financial
+                advice.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon7} className="icon" alt="" />
+              <h3>Multimedia Creation and Editing</h3>
+              <div className="subtitle">
+                A team of experts in video and image creation and editing are
+                available round the clock at nominal rates.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon6} className="icon" alt="" />
+              <h3>Avail Discounts</h3>
+              <div className="subtitle">
+                From all participating apps and tools available for content
+                creation. Avail discounts at conferences, meetings, and get
+                updated on the latest trends in the field.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon5} className="icon" alt="" />
+              <h3>INFLUERE Linktree</h3>
+              <div className="subtitle">
+                Send your contacts ONE single link that leads them to a portal
+                from INFLUERE showing all your social media presence on one
+                page.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={Icon10} className="icon" alt="" />
+              <h3>Professional Liability Insurance</h3>
+              <div className="subtitle">
+                Safeguard yourself or your company from Legal lawsuits and and
+                protect yourself from financial claims from our varied insurance
+                policy packages to suite your needs.
+              </div>
+            </div>
+          </div>
+
+          <div className="hex md" role="img" aria-label="Analytics">
+            <div className="hex-content">
+              <img src={serviceIcon} className="icon" alt="" />
+              <h3>Lorem Ipsum</h3>
+              <div className="subtitle">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -107,7 +260,10 @@ const Home = () => {
       <div className="info-section wrapper">
         <div className="container">
           <div className="row">
-            <div className="col-md-4"><h2 className="fw-bold">About Us </h2><div className="line mb-3"></div></div>
+            <div className="col-md-4">
+              <h2 className="fw-bold">About Us </h2>
+              <div className="line mb-3"></div>
+            </div>
             <div className="col-md-8">
               <p>
                 Influere is a latin verb that means “to flow in” or “to affect”.

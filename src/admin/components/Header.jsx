@@ -14,14 +14,29 @@ const Header = ({
   };
 
   const handleWalletClick = () => {
-    navigate('/admin/wallet');
+    navigate('/dashboard/wallet');
+  };
+
+  const handleEditProfileClick = () => {
+    navigate('/dashboard/my-profile/edit');
+    setShowUserDropdown(false);
+  };
+
+  const handleTransactionHistoryClick = () => {
+    navigate('/dashboard/my-profile/transaction-history');
+    setShowUserDropdown(false);
+  };
+
+  const handleSettingsClick = () => {
+    navigate('/dashboard/settings');
+    setShowUserDropdown(false);
   };
 
   return (
     <header className="admin-header">
       {/* Greeting Section */}
       <div className="admin-header-greeting">
-        <p className="admin-header-greeting-text" style={{color:'#000', fontWeight:'bold'}}>Hi, {userName}</p>
+        <p className="admin-header-greeting-text" style={{color:'#000'}}>Hi, {userName}</p>
       </div>
 
       {/* Right Section - Icons and User */}
@@ -64,9 +79,29 @@ const Header = ({
           {/* User Dropdown */}
           {showUserDropdown && (
             <div className="admin-header-user-dropdown">
-              <div className="admin-header-dropdown-item">
+              <div 
+                className="admin-header-dropdown-item"
+                onClick={handleEditProfileClick}
+                style={{ cursor: 'pointer' }}
+              >
                 <i className="bi bi-person"></i>
-                <span>My Profile</span>
+                <span>Edit Profile</span>
+              </div>
+              <div 
+                className="admin-header-dropdown-item"
+                onClick={handleTransactionHistoryClick}
+                style={{ cursor: 'pointer' }}
+              >
+                <i className="bi bi-clock-history"></i>
+                <span>Transaction History</span>
+              </div>
+              <div 
+                className="admin-header-dropdown-item"
+                onClick={handleSettingsClick}
+                style={{ cursor: 'pointer' }}
+              >
+                <i className="bi bi-gear"></i>
+                <span>Settings</span>
               </div>
               <div className="admin-header-dropdown-item">
                 <i className="bi bi-box-arrow-right"></i>

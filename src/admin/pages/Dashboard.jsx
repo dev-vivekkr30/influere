@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import usePageTitle from "../../hooks/usePageTitle";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,6 +17,7 @@ import {
   getFilteredRowModel,
   flexRender,
 } from "@tanstack/react-table";
+import DateRangeFilter from "../components/DateRangeFilter";
 import "./Dashboard.css";
 
 // Register Chart.js components
@@ -39,6 +41,7 @@ import tiktokIcon from "../../assets/ticktok.svg";
 import youtubeIcon from "../../assets/youtube.svg";
 
 const Dashboard = () => {
+  usePageTitle("Dashboard");
   const [timeframe, setTimeframe] = useState("days");
 
   // Chart.js data configuration
@@ -438,7 +441,6 @@ const Dashboard = () => {
         <div className="table-container-wrapper">
           <div className="table-controls">
           <div className="search-box">
-              <i className="bi bi-search text-muted fs-6 me-2"></i>
               <input
                 type="text"
                 placeholder="Search..."
@@ -446,7 +448,7 @@ const Dashboard = () => {
                 onChange={(e) => setGlobalFilter(e.target.value)}
               />
             </div>
-            <button className="filter-btn"><i class="bi bi-funnel"></i></button>
+            <DateRangeFilter onApply={(range) => console.log(range)} />
           </div>
 
           <div className="table-container">

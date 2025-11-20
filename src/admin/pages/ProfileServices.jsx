@@ -1,6 +1,8 @@
 import React from 'react';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const ProfileServices = () => {
+  usePageTitle('Profile Services');
   return (
     <div className="admin-page">
       <div className="admin-page-header">

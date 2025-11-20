@@ -309,7 +309,7 @@ li {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border: 2px dashed var(--gray-300);
+  border: 1px solid var(--gray-300);
   border-radius: 0.5rem;
   background: var(--white-50);
   cursor: pointer;

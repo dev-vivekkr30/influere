@@ -105,13 +105,16 @@
 }
 
 .admin-nav-link.active {
+  background-color: var(--admin-white-500);
   font-weight: 700 !important;
   color: var(--admin-primary-900);
+  border-right: 4px solid var(--admin-primary-500);
 }
 
 .admin-nav-link.has-active-child {
-  background-color: var(--admin-primary-50);
-  color: var(--admin-primary-700);
+  background-color: var(--admin-white-500);
+  color: var(--admin-primary-900);
+  font-weight: 700 !important;
 }
 
 .admin-nav-link-premium {
@@ -146,13 +149,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  display: none;
 }
 
 .admin-nav-label {
   flex: 1;
   font-size: var(--admin-font-size-sm);
-  font-weight: var(--admin-font-weight-medium);
+  font-weight: 400 !important;
 }
 
 .premium-badge {
@@ -206,8 +208,9 @@
 }
 
 .admin-nav-children .admin-nav-link.active {
-  background-color: var(--admin-white-600);
-  color: var(--admin-primary-800);
+  background-color: var(--admin-white-500);
+  color: var(--admin-primary-900);
+  font-weight: 700 !important;
 }
 
 /* Sidebar Footer */

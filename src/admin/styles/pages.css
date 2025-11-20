@@ -1,24 +1,25 @@
 /* Admin Page Styles */
 .admin-page {
-  padding: var(--admin-space-6);
+  padding: 16px;
   max-width: 100%;
-  background-color: var(--admin-bg-primary);
+  /* background-color: var(--admin-bg-primary); */
   min-height: 100vh;
 }
 
 .admin-page-header {
-  margin-bottom: var(--admin-space-8);
+  margin-bottom: 6px;
 }
 
 .admin-page-title {
-  font-size: var(--admin-font-size-3xl);
-  font-weight: var(--admin-font-weight-bold);
-  color: var(--admin-text-primary);
-  margin: 0 0 var(--admin-space-2) 0;
+  font-size: 20px;
+  font-weight: var(--admin-font-weight-medium);
+  color: var(--admin-gray-900);
+  border-bottom: 1px solid #EDEDED;
+  padding-bottom: 12px;
 }
 
 .admin-page-subtitle {
-  font-size: var(--admin-font-size-lg);
+  font-size: 16px;
   color: var(--admin-text-secondary);
   margin: 0;
 }
@@ -214,7 +215,8 @@
   }
   
   .admin-page-title {
-    font-size: var(--admin-font-size-2xl);
+    font-size: 20px;
+    font-weight: var(--admin-font-weight-medium);
   }
   
   .admin-card .card-body {

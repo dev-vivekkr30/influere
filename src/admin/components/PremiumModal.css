@@ -11,7 +11,8 @@
 }
 
 .premium-modal .modal-content .modal-body {
-  padding: 32px;
+  padding: 18px;
+  margin: 0 !important;
 }
 
 .premium-modal-close {
@@ -50,7 +51,7 @@
 }
 
 .premium-modal-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #1f2937;
   margin: 0 0 12px 0;
@@ -107,3 +108,7 @@
   opacity: 0.5;
 }
 
+
+.modal-footer{
+  justify-content: flex-start !important;
+}

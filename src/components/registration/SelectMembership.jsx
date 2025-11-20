@@ -50,7 +50,10 @@ const SelectMembership = ({
                 <button
                   type="button"
                   className="membership-btn basic-btn"
-                  onClick={() => handleMembershipSelect("basic")}
+                  onClick={() => {
+                    handleMembershipSelect("basic");
+                    onNext();
+                  }}
                 >
                   Start Free Trial
                 </button>
@@ -162,7 +165,10 @@ const SelectMembership = ({
                 <button
                   type="button"
                   className="membership-btn advanced-btn"
-                  onClick={() => handleMembershipSelect("advanced")}
+                  onClick={() => {
+                    handleMembershipSelect("advanced");
+                    onNext();
+                  }}
                 >
                   Start Free Trial
                 </button>

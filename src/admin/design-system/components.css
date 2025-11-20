@@ -238,10 +238,12 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: var(--admin-white-50);
-  border: 1px solid var(--admin-gray-200);
+  background: #ffffff;
+  border: 1px solid var(--admin-gray-50);
   border-radius: 4px;
   padding: 10px 12px;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .form-input-group input {

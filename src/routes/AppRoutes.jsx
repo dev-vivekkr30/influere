@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Registration from "../pages/Registration";
 import MainLayout from "../layouts/MainLayout";
@@ -15,7 +15,8 @@ const AppRoutes = () => {
       <Route path="/register" element={<Registration />} />
       
       {/* Admin Routes */}
-      <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route path="/dashboard/*" element={<AdminRoutes />} />
+      <Route path="/admin/*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 };

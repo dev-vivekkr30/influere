@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import usePageTitle from '../hooks/usePageTitle';
 import StepProgress from '../components/registration/StepProgress';
 import CreateProfile from '../components/registration/CreateProfile';
 import VerifyIdentity from '../components/registration/VerifyIdentity';
 import FinalizeAccount from '../components/registration/FinalizeAccount';
 import VideoCall from '../components/registration/VideoCall';
 import SelectMembership from '../components/registration/SelectMembership';
-import RegistrationComplete from '../components/registration/RegistrationComplete';
+import ReviewPage from '../components/registration/ReviewPage';
 import RegistrationLayout from '../layouts/RegistrationLayout';
 
 const Registration = () => {
+  usePageTitle("Registration");
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1: Create Profile
@@ -43,16 +45,15 @@ const Registration = () => {
     { id: 2, title: 'Verify your Identity', component: VerifyIdentity },
     { id: 3, title: 'Finalize your account', component: FinalizeAccount },
     { id: 4, title: 'Video call', component: VideoCall },
-    { id: 5, title: 'Select Membership', component: SelectMembership }
+    { id: 5, title: 'Select Membership', component: SelectMembership },
+    { id: 6, title: 'Review', component: ReviewPage }
   ];
 
   const handleNext = () => {
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
-    } else {
-      // Registration completed, show completion page
-      setCurrentStep(steps.length + 1);
     }
+    // Registration completion is handled by SuccessModal auto-redirect
   };
 
   const handleBack = () => {
@@ -67,19 +68,6 @@ const Registration = () => {
       [field]: value
     }));
   };
-
-  // Show completion page if registration is finished
-  if (currentStep > steps.length) {
-    return (
-      <RegistrationLayout>
-        <div className="registration-container">
-          <div className="registration-content">
-            <RegistrationComplete formData={formData} />
-          </div>
-        </div>
-      </RegistrationLayout>
-    );
-  }
 
   const CurrentStepComponent = steps[currentStep - 1].component;
 
