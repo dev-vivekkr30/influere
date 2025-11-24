@@ -14,6 +14,7 @@ const fakeProfileRows = [
     reportedCount: 12,
     date: "23-10-2025",
     status: "incoming",
+    reviewStatus: "Under Review",
   },
   {
     id: 3,
@@ -38,6 +39,7 @@ const fakeProfileRows = [
     reportedCount: 12,
     date: "22-10-2025",
     status: "incoming",
+    reviewStatus: "Success",
   },
 ];
 

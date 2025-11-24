@@ -13,6 +13,7 @@ import DiscountOffers from './pages/DiscountOffers';
 import TransactionHistory from './pages/TransactionHistory';
 import SettingsPage from './pages/SettingsPage';
 import ConsultancyCategoryPage from './pages/ConsultancyCategoryPage';
+import Insurance from './pages/Insurance';
 import CollaborationSetup from './pages/CollaborationSetup';
 import CollaborationPage from './pages/CollaborationPage';
 import CollaborationShortlisted from './pages/CollaborationShortlisted';
@@ -85,6 +86,11 @@ const defaultNavigationItems = [
         label: 'Multimedia',
         path: '/dashboard/professional-consultancy/multimedia',
       },
+      {
+        id: 'consultancy-insurance',
+        label: 'Insurance',
+        path: '/dashboard/professional-consultancy/insurance',
+      },
     ],
   },
   {
@@ -151,6 +157,7 @@ const AdminApp = ({
           <Route path="settings" element={<SettingsPage />} />
           <Route path="professional-consultancy" element={<ConsultancyCategoryPage />} />
           <Route path="professional-consultancy/:categoryId" element={<ConsultancyCategoryPage />} />
+          <Route path="professional-consultancy/insurance" element={<Insurance />} />
           <Route path="consultancy" element={<ProfileServices />} />
           <Route path="collaboration" element={<Navigate to="/dashboard/collaboration/setup" replace />} />
           <Route path="collaboration/setup" element={<CollaborationSetup />} />

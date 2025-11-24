@@ -4,6 +4,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import consultancyData from '../data/consultancyData';
 import ConsultancyUserModal from '../components/ConsultancyUserModal';
 import ConsultancyBookingModal from '../components/ConsultancyBookingModal';
+import SliderDropdown from '../components/SliderDropdown';
 import './ConsultancyCategoryPage.css';
 
 const DEFAULT_CATEGORY = 'legal';
@@ -13,6 +14,7 @@ const ConsultancyCategoryPage = () => {
   const navigate = useNavigate();
   const [selectedProfessional, setSelectedProfessional] = useState(null);
   const [showBooking, setShowBooking] = useState(false);
+  const [filterValues, setFilterValues] = useState({});
 
   const categoryKey = useMemo(() => {
     if (categoryId && consultancyData[categoryId]) {
@@ -46,6 +48,66 @@ const ConsultancyCategoryPage = () => {
     setShowBooking(true);
   };
 
+  const handleFilterChange = (filterId, value) => {
+    setFilterValues(prev => ({
+      ...prev,
+      [filterId]: value
+    }));
+  };
+
+  const getFilterValue = (filter) => {
+    if (filterValues[filter.id] !== undefined) {
+      return filterValues[filter.id];
+    }
+    if (filter.type === 'slider') {
+      return filter.min;
+    }
+    return '';
+  };
+
+  const renderFilter = (filter) => {
+    if (filter.type === 'slider') {
+      return (
+        <SliderDropdown
+          key={filter.id}
+          label={filter.label}
+          placeholder={filter.placeholder}
+          min={filter.min}
+          max={filter.max}
+          step={filter.step || 1}
+          prefix={filter.prefix || ''}
+          suffix={filter.suffix || ''}
+          value={getFilterValue(filter)}
+          onChange={(value) => handleFilterChange(filter.id, value)}
+        />
+      );
+    }
+
+    return (
+      <div key={filter.id} className="consultancy-filter">
+        <span className="consultancy-filter-label">{filter.label}</span>
+        <div className="consultancy-select">
+          <select 
+            value={getFilterValue(filter)} 
+            onChange={(e) => handleFilterChange(filter.id, e.target.value)}
+          >
+            <option value="" disabled>
+              {filter.placeholder}
+            </option>
+            {filter.options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <span className="consultancy-select-caret">
+            <i className="bi bi-chevron-down"></i>
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   if (!category) {
     return null;
   }
@@ -57,26 +119,7 @@ const ConsultancyCategoryPage = () => {
       </div>
 
       <div className="consultancy-filters">
-        {category.filters.map((filter) => (
-          <div key={filter.id} className="consultancy-filter">
-            <span className="consultancy-filter-label">{filter.label}</span>
-            <div className="consultancy-select">
-              <select defaultValue="">
-                <option value="" disabled>
-                  {filter.placeholder}
-                </option>
-                {filter.options.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <span className="consultancy-select-caret">
-                <i className="bi bi-chevron-down"></i>
-              </span>
-            </div>
-          </div>
-        ))}
+        {category.filters.map(renderFilter)}
       </div>
 
       <div className="consultancy-grid">

@@ -15,24 +15,60 @@ const SLIDER_MAX = 1000;
 const ProfileSellModal = ({ show, onClose }) => {
   const [platform, setPlatform] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
-  const [amount, setAmount] = useState("$500");
-  const [sliderValue, setSliderValue] = useState(500);
+  const [minAmount, setMinAmount] = useState("");
+  const [maxAmount, setMaxAmount] = useState("");
+  const [minSliderValue, setMinSliderValue] = useState(300);
+  const [maxSliderValue, setMaxSliderValue] = useState(700);
 
-  const sliderProgress = useMemo(() => {
-    return ((sliderValue - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * 100;
-  }, [sliderValue]);
+  const minSliderProgress = useMemo(() => {
+    return ((minSliderValue - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * 100;
+  }, [minSliderValue]);
 
-  const sliderLabel = useMemo(() => {
-    if (sliderValue >= 1000) {
+  const maxSliderProgress = useMemo(() => {
+    return ((maxSliderValue - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * 100;
+  }, [maxSliderValue]);
+
+  const formatSliderLabel = (value) => {
+    if (value >= 1000) {
       return "1M";
     }
-    return `${Math.round(sliderValue / 10)}0k`;
-  }, [sliderValue]);
+    return `${Math.round(value / 10)}0k`;
+  };
 
-  const handleSliderChange = (event) => {
+  const handleMinSliderChange = (event) => {
     const value = Number(event.target.value);
-    setSliderValue(value);
-    setAmount(`$${value}`);
+    if (value <= maxSliderValue) {
+      setMinSliderValue(value);
+      setMinAmount(`$${value}`);
+    }
+  };
+
+  const handleMaxSliderChange = (event) => {
+    const value = Number(event.target.value);
+    if (value >= minSliderValue) {
+      setMaxSliderValue(value);
+      setMaxAmount(`$${value}`);
+    }
+  };
+
+  const handleMinAmountChange = (event) => {
+    const value = event.target.value;
+    setMinAmount(value);
+    // Extract numeric value and update slider if valid
+    const numValue = parseInt(value.replace(/[^0-9]/g, ''));
+    if (!isNaN(numValue) && numValue >= SLIDER_MIN && numValue <= SLIDER_MAX && numValue <= maxSliderValue) {
+      setMinSliderValue(numValue);
+    }
+  };
+
+  const handleMaxAmountChange = (event) => {
+    const value = event.target.value;
+    setMaxAmount(value);
+    // Extract numeric value and update slider if valid
+    const numValue = parseInt(value.replace(/[^0-9]/g, ''));
+    if (!isNaN(numValue) && numValue >= SLIDER_MIN && numValue <= SLIDER_MAX && numValue >= minSliderValue) {
+      setMaxSliderValue(numValue);
+    }
   };
 
   if (!show) {
@@ -82,28 +118,53 @@ const ProfileSellModal = ({ show, onClose }) => {
 
         <div className="add-funds-section">
           <label className="form-label">Amount</label>
-          <div className="form-input-group">
-            <input
-              type="text"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
-            />
+          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <div className="form-input-group" style={{ flex: 1 }}>
+              <input
+                type="text"
+                value={minAmount}
+                onChange={handleMinAmountChange}
+                placeholder="Min Amount"
+              />
+            </div>
+            <span style={{ color: "var(--admin-gray-500)", fontSize: "14px" }}>to</span>
+            <div className="form-input-group" style={{ flex: 1 }}>
+              <input
+                type="text"
+                value={maxAmount}
+                onChange={handleMaxAmountChange}
+                placeholder="Max Amount"
+              />
+            </div>
           </div>
         </div>
 
         <div className="add-funds-section">
           <label className="form-label">Suggested Range</label>
-          <div className="sell-range-wrapper">
+          <div className="sell-range-wrapper" style={{ position: "relative", paddingTop: "24px", paddingBottom: "12px" }}>
             <input
               type="range"
               min={SLIDER_MIN}
               max={SLIDER_MAX}
-              value={sliderValue}
-              onChange={handleSliderChange}
+              value={minSliderValue}
+              onChange={handleMinSliderChange}
               className="sell-range-input"
+              style={{ position: "absolute", width: "100%", zIndex: minSliderValue > maxSliderValue - 50 ? 3 : 1 }}
             />
-            <div className="sell-range-value" style={{ left: `${sliderProgress}%` }}>
-              {sliderLabel}
+            <input
+              type="range"
+              min={SLIDER_MIN}
+              max={SLIDER_MAX}
+              value={maxSliderValue}
+              onChange={handleMaxSliderChange}
+              className="sell-range-input"
+              style={{ position: "absolute", width: "100%", zIndex: maxSliderValue < minSliderValue + 50 ? 3 : 2 }}
+            />
+            <div className="sell-range-value" style={{ left: `${minSliderProgress}%`, top: "-16px", zIndex: 4 }}>
+              {formatSliderLabel(minSliderValue)}
+            </div>
+            <div className="sell-range-value" style={{ left: `${maxSliderProgress}%`, top: "-16px", zIndex: 4 }}>
+              {formatSliderLabel(maxSliderValue)}
             </div>
           </div>
         </div>

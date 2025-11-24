@@ -82,6 +82,12 @@ export const insuranceFilters = [
     options: ["₹1 Crore", "₹2 Crore"],
   },
   {
+    id: "netCoverage",
+    label: "Net Coverage",
+    placeholder: "Net Coverage",
+    options: ["1 Lakh", "5 Lakh", "50 Lakh", "1 Cr", "> 1 Cr"],
+  },
+  {
     id: "coverageTime",
     label: "Coverage Time",
     placeholder: "Coverage Time",

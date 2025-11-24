@@ -30,14 +30,14 @@
   background-color: #FFFFFF;
   border: 1px solid #EDEDED;
   border-radius: 6px;
-  padding: 0 12px;
+  /* padding: 0 12px; */
 }
 
 .consultancy-select select {
   width: 100%;
   border: none;
   background: transparent;
-  padding: var(--admin-space-3) 0;
+  padding: var(--admin-space-3) 12px;
   font-size: var(--admin-font-size-sm);
   appearance: none;
 }

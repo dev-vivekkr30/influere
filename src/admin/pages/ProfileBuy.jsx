@@ -2,6 +2,11 @@ import React, { useMemo, useState } from "react";
 import usePageTitle from "../../hooks/usePageTitle";
 import buyProfileRows from "../data/profileBuyData";
 import ProfileSellModal from "../components/ProfileSellModal";
+import SliderDropdown from "../components/SliderDropdown";
+import { collaborationProfiles } from "../data/collaborationProfilesData";
+import "../components/ConsultancyModals.css";
+import "./ConsultancyCategoryPage.css";
+import "./CollaborationPage.css";
 import "./Wallet.css";
 import "./ProfileSell.css";
 
@@ -33,6 +38,12 @@ const ProfileBuy = () => {
   const [searchValue, setSearchValue] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedActionRow, setSelectedActionRow] = useState(null);
+  const [filterValues, setFilterValues] = useState({
+    socialMediaPlatform: '',
+    followers: '',
+    posts: '',
+    revenueRange: 100,
+  });
 
   const counts = useMemo(() => ({
     all: buyProfileRows.length,
@@ -64,10 +75,150 @@ const ProfileBuy = () => {
     setShowModal(true);
   };
 
+  const handleFilterChange = (filterId, value) => {
+    setFilterValues(prev => ({
+      ...prev,
+      [filterId]: value
+    }));
+  };
+
+  const getFilterValue = (filter) => {
+    if (filterValues[filter.id] !== undefined) {
+      return filterValues[filter.id];
+    }
+    if (filter.type === 'slider') {
+      return filter.min;
+    }
+    return '';
+  };
+
+  const filters = [
+    {
+      id: 'socialMediaPlatform',
+      label: 'Social Media Platform',
+      placeholder: 'Select',
+      type: 'dropdown',
+      options: ['Facebook', 'Instagram', 'YouTube', 'Twitter', 'Tiktok'],
+    },
+    {
+      id: 'followers',
+      label: 'Followers',
+      placeholder: 'Select',
+      type: 'dropdown',
+      options: ['Nano : 1k-10k', 'Micro : 10k-100k', 'Macro : 100k-1M', 'Mega : >1M'],
+    },
+    {
+      id: 'posts',
+      label: 'Posts',
+      placeholder: 'Select',
+      type: 'dropdown',
+      options: ['10-100', '100-1000', '1k-10k', '10k-1M'],
+    },
+    {
+      id: 'revenueRange',
+      label: 'Revenue Range',
+      placeholder: 'Select revenue',
+      type: 'slider',
+      min: 100,
+      max: 1000000,
+      step: 1000,
+      prefix: '$',
+    },
+  ];
+
+  const renderFilter = (filter) => {
+    if (filter.type === 'slider') {
+      return (
+        <SliderDropdown
+          key={filter.id}
+          label={filter.label}
+          placeholder={filter.placeholder}
+          min={filter.min}
+          max={filter.max}
+          step={filter.step || 1}
+          prefix={filter.prefix || ''}
+          suffix={filter.suffix || ''}
+          value={getFilterValue(filter)}
+          onChange={(value) => handleFilterChange(filter.id, value)}
+        />
+      );
+    }
+
+    return (
+      <div key={filter.id} className="consultancy-filter">
+        <span className="consultancy-filter-label">{filter.label}</span>
+        <div className="consultancy-select">
+          <select 
+            value={getFilterValue(filter)} 
+            onChange={(e) => handleFilterChange(filter.id, e.target.value)}
+          >
+            <option value="" disabled>
+              {filter.placeholder}
+            </option>
+            {filter.options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <span className="consultancy-select-caret">
+            <i className="bi bi-chevron-down"></i>
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="admin-page profile-sell-page">
       <div className="profile-sell-header">
         <h1 className="profile-sell-heading">Buy Profile</h1>
+      </div>
+
+      <div className="consultancy-filters">
+        {filters.map(renderFilter)}
+      </div>
+
+      <div className="consultancy-grid">
+        {collaborationProfiles.map((profile) => (
+          <div
+            key={profile.id}
+            className="consultancy-card collaboration-card"
+            role="button"
+            tabIndex={0}
+            onKeyPress={(event) => {
+              if (event.key === 'Enter') {
+                // Handle card click if needed
+              }
+            }}
+          >
+            <div className="consultancy-card-header">
+              <div className="consultancy-avatar">
+                <img src={profile.avatar} alt={profile.name} />
+              </div>
+              <div className="consultancy-card-meta">
+                <h3 className="consultancy-card-name">{profile.name}</h3>
+                <div className="consultancy-card-stats">
+                  <span className="consultancy-reach">{profile.reach} Reach</span>
+                  <span className="consultancy-rating">
+                    {profile.ratingLabel}
+                    <i className="bi bi-star-fill"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="consultancy-card-tags">
+              {profile.tags.map((tag, index) => (
+                <span key={index} className="consultancy-tag">
+                  {tag.label}: {tag.value}
+                </span>
+              ))}
+            </div>
+
+            <p className="consultancy-card-summary">{profile.summary}</p>
+          </div>
+        ))}
       </div>
 
       <div className="dashboard-table-section">

@@ -77,7 +77,7 @@ const ProfileSell = () => {
 
   return (
     <div className="admin-page profile-sell-page">
-      <div className="profile-sell-header">
+      <div className="profile-sell-header mb-3">
         <div>
           <h1 className="profile-sell-heading">Profile Sell</h1>
           

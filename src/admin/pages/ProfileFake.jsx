@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from "react";
 import usePageTitle from "../../hooks/usePageTitle";
 import fakeProfileRows from "../data/profileFakeData";
-import FakeProfileReportModal from "../components/FakeProfileReportModal";
 import "./Wallet.css";
 import "./ProfileSell.css";
 
+const platforms = ["Instagram", "Facebook", "Twitter", "YouTube", "TikTok"];
+
 const tabConfig = [
-  { id: "report", label: "Report" },
+  { id: "report", label: "Outgoing" },
   { id: "incoming", label: "Incoming" },
-  { id: "success", label: "Success" },
 ];
 
 const ProfileFake = () => {
@@ -16,11 +16,24 @@ const ProfileFake = () => {
   const [activeTab, setActiveTab] = useState("report");
   const [searchValue, setSearchValue] = useState("");
   const [showReportModal, setShowReportModal] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [formData, setFormData] = useState({
+    platform: "",
+    profileLink: "",
+    posts: "",
+    explanation: "",
+  });
+  const [reportModalData, setReportModalData] = useState({
+    platform: "",
+    profileLink: "",
+    explanation: "",
+    video: null,
+    screenshot: null,
+  });
 
   const counts = useMemo(() => ({
     report: fakeProfileRows.filter((row) => row.status === "report").length,
     incoming: fakeProfileRows.filter((row) => row.status === "incoming").length,
-    success: fakeProfileRows.filter((row) => row.status === "success").length,
   }), []);
 
   const filteredRows = useMemo(() => {
@@ -33,13 +46,191 @@ const ProfileFake = () => {
     });
   }, [activeTab, searchValue]);
 
+  const handleFormChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log("Form submitted:", formData);
+    // Reset form
+    setFormData({
+      platform: "",
+      profileLink: "",
+      posts: "",
+      explanation: "",
+    });
+  };
+
+  const getStatusBadgeClass = (reviewStatus) => {
+    if (reviewStatus === "Success") {
+      return "status-successful";
+    }
+    return "status-process";
+  };
+
+  const handleReportClick = (row) => {
+    setSelectedRow(row);
+    setShowReportModal(true);
+    setReportModalData({
+      platform: row.platform || "",
+      profileLink: row.profileUrl || "",
+      explanation: "",
+      video: null,
+      screenshot: null,
+    });
+  };
+
+  const handleReportModalChange = (field, value) => {
+    setReportModalData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleReportFileChange = (field, file) => {
+    setReportModalData(prev => ({
+      ...prev,
+      [field]: file
+    }));
+  };
+
+  const handleReportSubmit = (e) => {
+    e.preventDefault();
+    // Handle report submission here
+    console.log("Report submitted:", reportModalData);
+    setShowReportModal(false);
+    setSelectedRow(null);
+    setReportModalData({
+      platform: "",
+      profileLink: "",
+      explanation: "",
+      video: null,
+      screenshot: null,
+    });
+  };
+
+  const handleReportModalClose = () => {
+    setShowReportModal(false);
+    setSelectedRow(null);
+    setReportModalData({
+      platform: "",
+      profileLink: "",
+      explanation: "",
+      video: null,
+      screenshot: null,
+    });
+  };
+
   return (
     <div className="admin-page profile-sell-page">
       <div className="profile-sell-header">
         <h1 className="profile-sell-heading">Fake profile</h1>
-        <button type="button" className="dark-btn" onClick={() => setShowReportModal(true)}>
-          Request To Report
-        </button>
+      </div>
+
+      <div className="dashboard-table-section" style={{ marginBottom: "24px" }}>
+        <div className="table-header">
+          <h2 className="table-title mb-0">Request To Report</h2>
+        </div>
+        <div style={{ marginBottom: "16px", padding: "12px", background: "#E3F2FD", borderRadius: "6px", border: "1px solid #BBDEFB" }}>
+          <p style={{ fontSize: "14px", color: "var(--admin-gray-700)", margin: 0 }}>
+            Can only be an account owned by you or Your Company. Basic - 3 per month and Advance - 100 per month.
+          </p>
+        </div>
+        <div>
+          <form onSubmit={handleFormSubmit}>
+            <div>
+              <div className="add-funds-section">
+                <label className="form-label">Select Platform</label>
+                <div>
+                  <select 
+                    value={formData.platform}
+                    onChange={(e) => handleFormChange("platform", e.target.value)}
+                    className="w-100 form-input-group"
+                  >
+                    <option value="" disabled>
+                      Value
+                    </option>
+                    {platforms.map((platform) => (
+                      <option key={platform} value={platform}>
+                        {platform}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="add-funds-section">
+                <label className="form-label">Link of Profile / Post</label>
+                <div className="form-input-group">
+                  <input
+                    type="text"
+                    value={formData.profileLink}
+                    onChange={(e) => handleFormChange("profileLink", e.target.value)}
+                    placeholder="https://instagram.com/username/postname"
+                  />
+                </div>
+              </div>
+
+              {/* <div className="add-funds-section">
+                <label className="form-label">Posts</label>
+                <div className="form-input-group">
+                  <input 
+                    type="number" 
+                    placeholder="Number of Posts"
+                    value={formData.posts}
+                    onChange={(e) => handleFormChange("posts", e.target.value)}
+                  />
+                </div>
+              </div> */}
+
+              <div className="add-funds-section">
+                <label className="form-label">Explanation</label>
+                <div className="form-input-group" style={{ alignItems: 'flex-start', minHeight: '80px' }}>
+                  <textarea 
+                    rows={3}
+                    value={formData.explanation}
+                    onChange={(e) => handleFormChange("explanation", e.target.value)}
+                    placeholder="Enter explanation..."
+                    style={{ 
+                      flex: 1,
+                      border: 'none', 
+                      outline: 'none',
+                      resize: 'vertical',
+                      fontFamily: 'inherit',
+                      fontSize: '14px',
+                      padding: '0',
+                      background: 'transparent',
+                      minHeight: '60px'
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: "flex", gap: "12px", marginTop: "16px" }}>
+                <button type="submit" className="btn-dark">
+                  Proceed
+                </button>
+                <button 
+                  type="button" 
+                  className="btn-light" 
+                  onClick={() => setFormData({
+                    platform: "",
+                    profileLink: "",
+                    posts: "",
+                    explanation: "",
+                  })}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
 
       <div className="dashboard-table-section">
@@ -84,6 +275,13 @@ const ProfileFake = () => {
               </div>
             </div>
           </div>
+          {activeTab === "incoming" && (
+            <div style={{ marginTop: "16px", marginBottom: "16px", padding: "12px", background: "#E3F2FD", borderRadius: "6px", border: "1px solid #BBDEFB" }}>
+              <p style={{ fontSize: "14px", color: "var(--admin-gray-700)", margin: 0 }}>
+                Complete as many incoming request to gain credits. Credits will be issued proof is uploaded and verified by our team.
+              </p>
+            </div>
+          )}
 
           <div className="table-container">
             <table className="data-table">
@@ -94,6 +292,7 @@ const ProfileFake = () => {
                   <th>Profile URL</th>
                   <th>Reported By Users</th>
                   <th>Date</th>
+                  {activeTab === "incoming" && <th>Status</th>}
                   <th></th>
                 </tr>
               </thead>
@@ -110,6 +309,13 @@ const ProfileFake = () => {
                     </td>
                     <td>{row.reportedCount}</td>
                     <td>{row.date}</td>
+                    {activeTab === "incoming" && (
+                      <td>
+                        <span className={`transaction-status ${getStatusBadgeClass(row.reviewStatus || "Under Review")}`}>
+                          {row.reviewStatus || "Under Review"}
+                        </span>
+                      </td>
+                    )}
                     <td>
                       <div className="dropdown">
                         <button
@@ -127,13 +333,15 @@ const ProfileFake = () => {
                             </a>
                           </li>
                           <li>
-                            <a className="dropdown-item" href="#">
-                              Mark as Success
-                            </a>
-                          </li>
-                          <li>
-                            <a className="dropdown-item text-danger" href="#">
-                              Remove
+                            <a 
+                              className="dropdown-item" 
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleReportClick(row);
+                              }}
+                            >
+                              Report
                             </a>
                           </li>
                         </ul>
@@ -143,7 +351,7 @@ const ProfileFake = () => {
                 ))}
                 {filteredRows.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-4">
+                    <td colSpan={activeTab === "incoming" ? 7 : 6} className="text-center py-4">
                       No records found for the selected filters.
                     </td>
                   </tr>
@@ -168,10 +376,143 @@ const ProfileFake = () => {
           </div>
         </div>
       </div>
-      <FakeProfileReportModal
-        show={showReportModal}
-        onClose={() => setShowReportModal(false)}
-      />
+
+      {/* Report Modal */}
+      {showReportModal && (
+        <div className="modal-overlay" onClick={handleReportModalClose}>
+          <div
+            className="modal-container add-funds-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button type="button" className="modal-close" onClick={handleReportModalClose}>
+              <i className="bi bi-x"></i>
+            </button>
+
+            <h2 className="modal-title">Report Profile</h2>
+
+            <form onSubmit={handleReportSubmit}>
+              <div className="add-funds-section">
+                <label className="form-label">Select Platform</label>
+                <div>
+                  <select 
+                    value={reportModalData.platform}
+                    onChange={(e) => handleReportModalChange("platform", e.target.value)}
+                    className="w-100 form-input-group"
+                    required
+                  >
+                    <option value="" disabled>
+                      Value
+                    </option>
+                    {platforms.map((platform) => (
+                      <option key={platform} value={platform}>
+                        {platform}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="add-funds-section">
+                <label className="form-label">Link of Profile / Post</label>
+                <div className="form-input-group">
+                  <input
+                    type="text"
+                    value={reportModalData.profileLink}
+                    onChange={(e) => handleReportModalChange("profileLink", e.target.value)}
+                    placeholder="https://instagram.com/username/postname"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* <div className="add-funds-section">
+                <label className="form-label">Posts</label>
+                <div className="form-input-group">
+                  <input 
+                    type="number" 
+                    placeholder="Number of Posts"
+                    value={reportModalData.posts}
+                    onChange={(e) => handleReportModalChange("posts", e.target.value)}
+                  />
+                </div>
+              </div> */}
+
+              <div className="add-funds-section">
+                <label className="form-label">Explanation</label>
+                <div className="form-input-group" style={{ alignItems: 'flex-start', minHeight: '80px' }}>
+                  <textarea 
+                    rows={3}
+                    value={reportModalData.explanation}
+                    onChange={(e) => handleReportModalChange("explanation", e.target.value)}
+                    placeholder="Enter explanation..."
+                    required
+                    style={{ 
+                      flex: 1,
+                      border: 'none', 
+                      outline: 'none',
+                      resize: 'vertical',
+                      fontFamily: 'inherit',
+                      fontSize: '14px',
+                      padding: '0',
+                      background: 'transparent',
+                      minHeight: '60px'
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="add-funds-section">
+                <label className="form-label">Upload Video</label>
+                <div className="file-upload">
+                  <input
+                    type="file"
+                    id="reportVideo"
+                    className="file-input"
+                    onChange={(e) => handleReportFileChange("video", e.target.files[0])}
+                    accept="video/*"
+                  />
+                  <label htmlFor="reportVideo" className="file-upload-label">
+                    <i className="bi bi-cloud-arrow-up"></i>
+                    <span>{reportModalData.video ? reportModalData.video.name : 'Choose File'}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="add-funds-section">
+                <label className="form-label">Upload Screenshot</label>
+                <div className="file-upload">
+                  <input
+                    type="file"
+                    id="reportScreenshot"
+                    className="file-input"
+                    onChange={(e) => handleReportFileChange("screenshot", e.target.files[0])}
+                    accept="image/*"
+                  />
+                  <label htmlFor="reportScreenshot" className="file-upload-label">
+                    <i className="bi bi-cloud-arrow-up"></i>
+                    <span>{reportModalData.screenshot ? reportModalData.screenshot.name : 'Choose File'}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div style={{ marginTop: "-8px", marginBottom: "16px" }}>
+                <p style={{ fontSize: "14px", color: "var(--admin-gray-600)", margin: 0 }}>
+                  5 credit
+                </p>
+              </div>
+
+              <div className="modal-footer">
+                <button type="submit" className="btn-dark">
+                  Proceed
+                </button>
+                <button type="button" className="btn-light" onClick={handleReportModalClose}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

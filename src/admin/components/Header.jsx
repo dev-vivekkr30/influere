@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { notifications } from '../data/notificationsData';
 import './Header.css';
 
 const Header = ({ 
@@ -51,7 +52,13 @@ const Header = ({
         </button>
 
         {/* Notifications Bell */}
-        <button className="admin-header-icon-btn" aria-label="Notifications">
+        <button 
+          className="admin-header-icon-btn" 
+          aria-label="Notifications"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#notificationsOffcanvas"
+          aria-controls="notificationsOffcanvas"
+        >
           <i className="bi bi-bell"></i>
         </button>
 
@@ -109,6 +116,42 @@ const Header = ({
               </div>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Notifications Offcanvas */}
+      <div
+        className="offcanvas offcanvas-end"
+        tabIndex="-1"
+        id="notificationsOffcanvas"
+        aria-labelledby="notificationsOffcanvasLabel"
+      >
+        <div className="offcanvas-header">
+          <h5 className="offcanvas-title" id="notificationsOffcanvasLabel">
+            Notifications
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div className="offcanvas-body">
+          <div className="notifications-list">
+            {notifications.map((notification) => (
+              <div key={notification.id} className="notification-card">
+                <div className="notification-content">
+                  <h6 className="notification-title">
+                    {notification.icon && <span className="notification-icon">{notification.icon}</span>}
+                    {notification.title}
+                  </h6>
+                  <p className="notification-message">{notification.message}</p>
+                  <span className="notification-timestamp">{notification.timestamp}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </header>

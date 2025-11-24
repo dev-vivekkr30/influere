@@ -197,3 +197,74 @@ admin-header-greeting-text{
     transform: translateY(0);
   }
 }
+
+/* Notifications Offcanvas Styles */
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notification-card {
+  background-color: #F5F5F5;
+  border-radius: 8px;
+  padding: 16px;
+  border: none;
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notification-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.notification-icon {
+  font-size: 16px;
+}
+
+.notification-message {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.notification-timestamp {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Offcanvas Header Customization */
+.offcanvas-header {
+  border-bottom: 1px solid #E0E0E0;
+  padding: 16px 20px;
+}
+
+.offcanvas-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.offcanvas-body {
+  padding: 20px;
+}
+
+.btn-close {
+  opacity: 0.5;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}

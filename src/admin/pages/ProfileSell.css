@@ -1,7 +1,6 @@
 .profile-sell-page {
   display: flex;
   flex-direction: column;
-  gap: 24px;
 }
 
 .profile-sell-header {
@@ -47,12 +46,23 @@
 
 .sell-range-wrapper {
   position: relative;
-  padding: 12px 0 0;
+  padding: 12px 0 24px;
 }
 
 .sell-range-input {
   width: 100%;
   accent-color: #066DAF;
+  pointer-events: none;
+}
+
+.sell-range-input::-webkit-slider-thumb {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.sell-range-input::-moz-range-thumb {
+  pointer-events: all;
+  cursor: pointer;
 }
 
 .sell-range-value {
@@ -64,6 +74,7 @@
   font-size: 12px;
   padding: 2px 10px;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
