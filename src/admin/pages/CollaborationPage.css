@@ -1,3 +1,70 @@
+/* Collaboration Header with AI Badge */
+.collaboration-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.collaboration-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ai-powered-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: #230046;
+  background: linear-gradient(90deg, rgba(35, 0, 70, 1) 0%, rgba(84, 41, 128, 1) 100%);
+  color: #FFFFFF;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.collaboration-header-description {
+  margin: 0;
+  font-size: 14px;
+  color: var(--admin-gray-600);
+}
+
+/* Work Order Section */
+.work-order-section {
+  padding: 16px;
+  background-color: var(--admin-white-100);
+  border-radius: 8px;
+  border: 1px solid var(--admin-white-400);
+}
+
+.work-order-description {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--admin-gray-900);
+  line-height: 1.6;
+}
+
+.work-order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+/* Section Title */
+.collaboration-section-title {
+  margin: 32px 0 16px 0;
+}
+
+.collaboration-section-title h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--admin-gray-900);
+}
+
 .collaboration-filters-bar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -145,6 +212,20 @@
   border: 1px solid var(--admin-gray-50);
 }
 
+/* .collaboration-card-checkbox {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+} */
+
+.collaboration-card-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--admin-primary-600);
+}
+
 .collaboration-card.with-actions {
   cursor: default;
 }
@@ -206,6 +287,68 @@
 
 .collaboration-message-btn i {
   font-size: 18px;
+}
+
+/* Asking Rates */
+.collaboration-asking-rates {
+  padding-top: 8px;
+  border-top: 1px solid var(--admin-gray-100);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.asking-rates-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--admin-gray-900);
+  margin: 0;
+}
+
+.asking-rate-item {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  background-color: #FFF3D5;
+  color: var(--admin-gray-900);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.asking-rate-label {
+  font-weight: 500;
+  color: var(--admin-gray-900);
+  margin-right: 4px;
+}
+
+.asking-rate-value {
+  color: var(--admin-gray-900);
+  font-weight: 500;
+}
+
+/* Send to Shortlisted Button */
+.collaboration-send-shortlisted {
+  margin-top: 32px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.collaboration-send-btn {
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--admin-gray-900);
+  color: var(--admin-white-500);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.collaboration-send-btn:hover {
+  background-color: var(--admin-primary-800);
 }
 
 @media (max-width: 768px) {

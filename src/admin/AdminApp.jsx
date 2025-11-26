@@ -111,9 +111,35 @@ const defaultNavigationItems = [
         path: '/dashboard/collaboration/setup',
       },
       {
-        id: 'collaboration-list',
-        label: 'Facebook -Tiktok -Instagram',
-        path: '/dashboard/collaboration/list',
+        id: 'collaboration-collaborate',
+        label: 'Collaborate',
+        path: '/dashboard/collaboration/collaborate',
+        children: [
+          {
+            id: 'collaboration-list',
+            label: 'Facebook',
+            path: '/dashboard/collaboration/list',
+            children: [
+              {
+                id: 'collaboration-shortlisted',
+                label: 'Shortlisted',
+                path: '/dashboard/collaboration/shortlisted',
+                children: [
+                  {
+                    id: 'shortlisted-incoming',
+                    label: 'Incoming',
+                    path: '/dashboard/collaboration/shortlisted?tab=incoming',
+                  },
+                  {
+                    id: 'shortlisted-outgoing',
+                    label: 'Outgoing',
+                    path: '/dashboard/collaboration/shortlisted?tab=outgoing',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
   },

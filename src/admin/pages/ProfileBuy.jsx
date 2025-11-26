@@ -175,7 +175,7 @@ const ProfileBuy = () => {
         <h1 className="profile-sell-heading">Buy Profile</h1>
       </div>
 
-      <div className="consultancy-filters">
+      <div className="consultancy-filters my-3">
         {filters.map(renderFilter)}
       </div>
 
@@ -209,11 +209,30 @@ const ProfileBuy = () => {
             </div>
 
             <div className="consultancy-card-tags">
-              {profile.tags.map((tag, index) => (
-                <span key={index} className="consultancy-tag">
-                  {tag.label}: {tag.value}
+              {profile.partner && (
+                <span className="consultancy-tag">
+                  <i className="bi bi-briefcase"></i>
+                  {profile.partner}
                 </span>
-              ))}
+              )}
+              {profile.designation && (
+                <span className="consultancy-tag">
+                  <i className="bi bi-award"></i>
+                  {profile.designation}
+                </span>
+              )}
+              {profile.experience && (
+                <span className="consultancy-tag">
+                  <i className="bi bi-buildings"></i>
+                  {profile.experience}
+                </span>
+              )}
+              {profile.location && (
+                <span className="consultancy-tag">
+                  <i className="bi bi-geo-alt"></i>
+                  {profile.location}
+                </span>
+              )}
             </div>
 
             <p className="consultancy-card-summary">{profile.summary}</p>

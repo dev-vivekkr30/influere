@@ -44,7 +44,12 @@ const CollaborationSetup = () => {
   const [activePlatform, setActivePlatform] = useState(platformTabs[0].id);
   const [settings, setSettings] = useState(
     collaborationSettings.reduce((acc, setting) => {
-      acc[setting.id] = { value: 500, amount: "$500" };
+      acc[setting.id] = { 
+        minValue: 300, 
+        maxValue: 700, 
+        minAmount: "$300",
+        maxAmount: "$700"
+      };
       return acc;
     }, {})
   );
@@ -57,27 +62,72 @@ const CollaborationSetup = () => {
   const [showCountryFlag, setShowCountryFlag] = useState(false);
   const [onThumbnail, setOnThumbnail] = useState(false);
 
-  const handleSliderChange = (settingId, value) => {
+  const handleMinSliderChange = (settingId, value) => {
     const numValue = Number(value);
-    setSettings((prev) => ({
-      ...prev,
-      [settingId]: {
-        value: numValue,
-        amount: `$${numValue}`,
-      },
-    }));
+    setSettings((prev) => {
+      const current = prev[settingId];
+      const newMinValue = Math.min(numValue, current.maxValue);
+      return {
+        ...prev,
+        [settingId]: {
+          ...current,
+          minValue: newMinValue,
+          minAmount: `$${newMinValue}`,
+        },
+      };
+    });
   };
 
-  const handleAmountChange = (settingId, amount) => {
+  const handleMaxSliderChange = (settingId, value) => {
+    const numValue = Number(value);
+    setSettings((prev) => {
+      const current = prev[settingId];
+      const newMaxValue = Math.max(numValue, current.minValue);
+      return {
+        ...prev,
+        [settingId]: {
+          ...current,
+          maxValue: newMaxValue,
+          maxAmount: `$${newMaxValue}`,
+        },
+      };
+    });
+  };
+
+  const handleMinAmountChange = (settingId, amount) => {
     const numValue = amount.replace(/[^0-9]/g, "");
     const value = numValue ? Number(numValue) : 0;
-    setSettings((prev) => ({
-      ...prev,
-      [settingId]: {
-        value: Math.min(Math.max(value, SLIDER_MIN), SLIDER_MAX),
-        amount: amount.startsWith("$") ? amount : `$${amount}`,
-      },
-    }));
+    const clampedValue = Math.min(Math.max(value, SLIDER_MIN), SLIDER_MAX);
+    setSettings((prev) => {
+      const current = prev[settingId];
+      const newMinValue = Math.min(clampedValue, current.maxValue);
+      return {
+        ...prev,
+        [settingId]: {
+          ...current,
+          minValue: newMinValue,
+          minAmount: amount.startsWith("$") ? amount : `$${amount}`,
+        },
+      };
+    });
+  };
+
+  const handleMaxAmountChange = (settingId, amount) => {
+    const numValue = amount.replace(/[^0-9]/g, "");
+    const value = numValue ? Number(numValue) : 0;
+    const clampedValue = Math.min(Math.max(value, SLIDER_MIN), SLIDER_MAX);
+    setSettings((prev) => {
+      const current = prev[settingId];
+      const newMaxValue = Math.max(clampedValue, current.minValue);
+      return {
+        ...prev,
+        [settingId]: {
+          ...current,
+          maxValue: newMaxValue,
+          maxAmount: amount.startsWith("$") ? amount : `$${amount}`,
+        },
+      };
+    });
   };
 
   const removeCountry = (country) => {
@@ -119,7 +169,7 @@ const CollaborationSetup = () => {
   return (
     <div className="admin-page collaboration-setup-page">
       <div className="collaboration-setup-header">
-        <h1 className="admin-page-title">Collaboration Setup</h1>
+        <h1 className="admin-page-title">Setup your profile to collaborate with others</h1>
       </div>
 
       <div className="collaboration-setup-content">
@@ -147,12 +197,19 @@ const CollaborationSetup = () => {
           <div className="insurance-list">
             {collaborationSettings.map((setting) => {
               const settingData = settings[setting.id];
-              const sliderProgress = useMemo(() => {
+              const minSliderProgress = useMemo(() => {
                 return (
-                  ((settingData.value - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) *
+                  ((settingData.minValue - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) *
                   100
                 );
-              }, [settingData.value]);
+              }, [settingData.minValue]);
+
+              const maxSliderProgress = useMemo(() => {
+                return (
+                  ((settingData.maxValue - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) *
+                  100
+                );
+              }, [settingData.maxValue]);
 
               return (
                 <div
@@ -168,32 +225,95 @@ const CollaborationSetup = () => {
 
                   <div className="setting-card-right">
                     <div className="w-100">
-                      <input style={{width: "100%", maxWidth: "100%"}}
-                        type="range"
-                        min={SLIDER_MIN}
-                        max={SLIDER_MAX}
-                        value={settingData.value}
-                        onChange={(e) =>
-                          handleSliderChange(setting.id, e.target.value)
-                        }
-                        className="collaboration-slider"
-                      />
-                      <div
-                        className="collaboration-slider-value"
-                        style={{ left: `${sliderProgress}%` }}
-                      >
-                        ${settingData.value}
+                      <div className="collaboration-range-wrapper" style={{ position: "relative", paddingTop: "12px", paddingBottom: "12px" }}>
+                        <div className="collaboration-range-track" style={{ 
+                          position: "absolute",
+                          top: "20px",
+                          left: 0,
+                          right: 0,
+                          height: "6px",
+                          background: "var(--admin-gray-100)",
+                          borderRadius: "3px",
+                          zIndex: 0
+                        }}></div>
+                        <div className="collaboration-range-active" style={{
+                          position: "absolute",
+                          top: "20px",
+                          left: `${minSliderProgress}%`,
+                          width: `${maxSliderProgress - minSliderProgress}%`,
+                          height: "6px",
+                          background: "#066daf",
+                          borderRadius: "3px",
+                          zIndex: 1
+                        }}></div>
+                        <input
+                          type="range"
+                          min={SLIDER_MIN}
+                          max={SLIDER_MAX}
+                          value={settingData.minValue}
+                          onChange={(e) =>
+                            handleMinSliderChange(setting.id, e.target.value)
+                          }
+                          className="collaboration-range-input"
+                          style={{ 
+                            position: "absolute", 
+                            width: "100%", 
+                            zIndex: settingData.minValue > settingData.maxValue - 50 ? 3 : 2 
+                          }}
+                        />
+                        <input
+                          type="range"
+                          min={SLIDER_MIN}
+                          max={SLIDER_MAX}
+                          value={settingData.maxValue}
+                          onChange={(e) =>
+                            handleMaxSliderChange(setting.id, e.target.value)
+                          }
+                          className="collaboration-range-input"
+                          style={{ 
+                            position: "absolute", 
+                            width: "100%", 
+                            zIndex: settingData.maxValue < settingData.minValue + 50 ? 3 : 2 
+                          }}
+                        />
+                        <div
+                          className="collaboration-range-value"
+                          style={{ left: `${minSliderProgress}%`, top: "-16px", zIndex: 4 }}
+                        >
+                          ${settingData.minValue}
+                        </div>
+                        <div
+                          className="collaboration-range-value"
+                          style={{ left: `${maxSliderProgress}%`, top: "-16px", zIndex: 4 }}
+                        >
+                          ${settingData.maxValue}
+                        </div>
                       </div>
                     </div>
-                    <div className="collaboration-amount-input">
-                      <input
-                        type="text"
-                        value={settingData.amount}
-                        onChange={(e) =>
-                          handleAmountChange(setting.id, e.target.value)
-                        }
-                        className="form-input-group"
-                      />
+                    <div className="collaboration-amount-inputs" style={{ display: "flex", gap: "12px", alignItems: "center", marginTop: "12px" }}>
+                      <div className="collaboration-amount-input" style={{ flex: 1 }}>
+                        <input
+                          type="text"
+                          value={settingData.minAmount}
+                          onChange={(e) =>
+                            handleMinAmountChange(setting.id, e.target.value)
+                          }
+                          className="form-input-group"
+                          placeholder="Min Amount"
+                        />
+                      </div>
+                      <span style={{ color: "var(--admin-gray-500)", fontSize: "14px" }}>to</span>
+                      <div className="collaboration-amount-input" style={{ flex: 1 }}>
+                        <input
+                          type="text"
+                          value={settingData.maxAmount}
+                          onChange={(e) =>
+                            handleMaxAmountChange(setting.id, e.target.value)
+                          }
+                          className="form-input-group"
+                          placeholder="Max Amount"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

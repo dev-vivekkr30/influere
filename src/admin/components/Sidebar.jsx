@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 import logo from '../../assets/logo.svg';
@@ -13,6 +13,7 @@ const Sidebar = ({
   tagline = "Collaborate With Professionals"
 }) => {
   const [expandedItems, setExpandedItems] = useState(new Set());
+  const recentlyToggledRef = useRef(new Set());
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const location = useLocation();
 
@@ -20,27 +21,63 @@ const Sidebar = ({
   const premiumFeatures = ['professional-consultancy-premium', 'collaboration-premium'];
 
   const toggleExpanded = (itemId) => {
-    const newExpanded = new Set(expandedItems);
-    if (newExpanded.has(itemId)) {
-      newExpanded.delete(itemId);
-    } else {
-      newExpanded.add(itemId);
-    }
-    setExpandedItems(newExpanded);
+    // Mark this item as recently toggled to prevent useEffect from overriding it
+    recentlyToggledRef.current.add(itemId);
+    
+    // Clear the flag after a delay to allow manual toggle to take effect
+    setTimeout(() => {
+      recentlyToggledRef.current.delete(itemId);
+    }, 500);
+    
+    setExpandedItems(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(itemId)) {
+        newExpanded.delete(itemId);
+      } else {
+        newExpanded.add(itemId);
+      }
+      return newExpanded;
+    });
   };
 
   const isItemActive = (item) => {
     if (item.exact) {
       return location.pathname === item.path;
     }
-    return location.pathname.startsWith(item.path);
+    
+    // Check if path matches (including query params)
+    const itemPath = item.path.split('?')[0];
+    const currentPath = location.pathname;
+    
+    // If item path has query params, check them too
+    if (item.path.includes('?')) {
+      const itemQuery = item.path.split('?')[1];
+      const currentQuery = location.search;
+      return currentPath === itemPath && currentQuery.includes(itemQuery);
+    }
+    
+    return currentPath.startsWith(itemPath);
   };
 
   const hasActiveChild = (item) => {
     if (!item.children) return false;
-    return item.children.some(child => 
-      location.pathname.startsWith(child.path)
-    );
+    
+    // Recursively check all children and nested children
+    const checkChildren = (children) => {
+      return children.some(child => {
+        const isChildActive = isItemActive(child);
+        if (isChildActive) return true;
+        
+        // Recursively check nested children
+        if (child.children && child.children.length > 0) {
+          return checkChildren(child.children);
+        }
+        
+        return false;
+      });
+    };
+    
+    return checkChildren(item.children);
   };
 
   const renderNavItem = (item, level = 0) => {
@@ -55,12 +92,15 @@ const Sidebar = ({
     const handleClick = (e) => {
       if (isPremium) {
         e.preventDefault();
+        e.stopPropagation();
         setShowPremiumModal(true);
         return;
       }
+      // If item has children, toggle expand/collapse
       if (hasChildren) {
-        e.preventDefault();
-        toggleExpanded(item.id);
+        e.preventDefault(); // Prevent navigation to allow toggle
+        e.stopPropagation(); // Stop event bubbling
+        toggleExpanded(item.id); // Always toggle the expanded state
       }
     };
 
@@ -95,11 +135,13 @@ const Sidebar = ({
         <NavLink
           to={item.path}
           end={shouldUseEnd}
-          className={({ isActive: navIsActive }) => 
-            `admin-nav-link ${(navIsActive || isActive) && !hasActiveChildItem ? 'active' : ''} ${
+          className={({ isActive: navIsActive }) => {
+            // For items with query params, use our custom isActive check
+            const customIsActive = item.path.includes('?') ? isActive : navIsActive;
+            return `admin-nav-link ${(customIsActive || isActive) && !hasActiveChildItem ? 'active' : ''} ${
               hasActiveChildItem ? 'has-active-child' : ''
-            }`
-          }
+            }`;
+          }}
           onClick={handleClick}
         >
           <div className="admin-nav-link-content">
@@ -129,20 +171,69 @@ const Sidebar = ({
   };
 
   useEffect(() => {
-    setExpandedItems(prev => {
-      const next = new Set(prev);
-      navigationItems.forEach(item => {
-        if (item.children && item.children.some(child => location.pathname.startsWith(child.path))) {
-          next.add(item.id);
+    // Helper function to check if an item is active (used within useEffect)
+    const checkItemActive = (item) => {
+      if (item.exact) {
+        return location.pathname === item.path;
+      }
+      
+      const itemPath = item.path.split('?')[0];
+      const currentPath = location.pathname;
+      
+      if (item.path.includes('?')) {
+        const itemQuery = item.path.split('?')[1];
+        const currentQuery = location.search;
+        return currentPath === itemPath && currentQuery.includes(itemQuery);
+      }
+      
+      return currentPath.startsWith(itemPath);
+    };
+    
+    // Helper to check if item or any of its descendants is active
+    const hasActiveDescendant = (item) => {
+      // Check if item itself is active
+      if (checkItemActive(item)) return true;
+      
+      // Check if any child or nested descendant is active
+      if (item.children && item.children.length > 0) {
+        return item.children.some(child => hasActiveDescendant(child));
+      }
+      
+      return false;
+    };
+    
+    // Recursively check and expand items that have active children
+    const checkAndExpand = (items, expanded) => {
+      items.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          // Check if any descendant is active
+          const hasActive = hasActiveDescendant(item);
+          
+          // Auto-expand items with active children (unless recently manually toggled)
+          // Don't override items that were just manually toggled
+          if (hasActive && !recentlyToggledRef.current.has(item.id)) {
+            expanded.add(item.id);
+          }
+          
+          // Recursively check nested children
+          checkAndExpand(item.children, expanded);
         }
       });
+    };
+    
+    setExpandedItems(prev => {
+      const next = new Set(prev);
+      
+      // Auto-expand items with active children (to show current route)
+      checkAndExpand(navigationItems, next);
 
+      // If nothing changed, return previous state to avoid re-renders
       if (next.size === prev.size && [...next].every(id => prev.has(id))) {
         return prev;
       }
       return next;
     });
-  }, [location.pathname, navigationItems]);
+  }, [location.pathname, location.search, navigationItems]);
 
   return (
     <>

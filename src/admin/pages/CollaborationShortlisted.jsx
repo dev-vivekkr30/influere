@@ -1,500 +1,896 @@
-import React, { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import usePageTitle from '../../hooks/usePageTitle';
-import { collaborationProfiles } from '../data/collaborationProfilesData';
-import '../components/ConsultancyModals.css';
-import './ConsultancyCategoryPage.css';
-import './CollaborationPage.css';
-import './Wallet.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import usePageTitle from "../../hooks/usePageTitle";
+import { collaborationProfiles } from "../data/collaborationProfilesData";
+import {
+  incomingWorkOrders,
+  outgoingWorkOrders,
+  createWorkOrdersFromProfileIds,
+} from "../data/workOrderData";
+import ProfileSellModal from "../components/ProfileSellModal";
+import AuctionInfluencerModal from "../components/AuctionInfluencerModal";
+import AuctionCollaboratorModal from "../components/AuctionCollaboratorModal";
+import "../components/ConsultancyModals.css";
+import "./ConsultancyCategoryPage.css";
+import "./CollaborationPage.css";
+import "./Wallet.css";
+import "./CollaborationShortlisted.css";
+import "./CollaborationSetup.css";
 
 const CollaborationShortlisted = () => {
-  usePageTitle('Shortlisted Collaborations');
+  usePageTitle("Shortlisted");
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [showAuctionModal, setShowAuctionModal] = useState(false);
-  const [showOfferModal, setShowOfferModal] = useState(false);
-  const [showMessageModal, setShowMessageModal] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState(null);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [successModalType, setSuccessModalType] = useState('auction'); // 'auction', 'offer', 'deal'
-  const [auctionData, setAuctionData] = useState({
-    minPrice: '',
-    maxPrice: '',
-    days: false,
-    hours: false,
-  });
-  const [offerData, setOfferData] = useState({
-    currentValue: '',
-    endsIn: '',
-  });
-  const [messageData, setMessageData] = useState({
-    name: '',
-    message: '',
-    file: null,
-  });
+  const tabParam = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState(tabParam || "incoming");
+  const [expandedAccordions, setExpandedAccordions] = useState(new Set());
+  const [showAuctionInfluencerModal, setShowAuctionInfluencerModal] = useState(false);
+  const [showAuctionCollaboratorModal, setShowAuctionCollaboratorModal] = useState(false);
+  const [offerPrice, setOfferPrice] = useState("$500");
+  const [offerDateTime, setOfferDateTime] = useState("24-10-2025 | 03:45 PM");
+  const [selectedOutgoingOrder, setSelectedOutgoingOrder] = useState("");
+  const [setupBidBetween, setSetupBidBetween] = useState(false);
+  const [sortBy, setSortBy] = useState("price-low-to-high");
+  const [chatMessages] = useState([
+    {
+      id: 1,
+      sender: "you",
+      text: "Work Order Name/Number: #1233\nBrief description of work: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+      time: "12:44 PM",
+    },
+    {
+      id: 2,
+      sender: "other",
+      senderName: "Sender User Name",
+      text: "I've processed your request and generated a comprehensive analysis. The results include key insights and actionable recommendations based on current financial data.",
+      time: "12:44 PM",
+    },
+  ]);
+
+  // Get selected profile IDs from URL params for backward compatibility
+  const selectedIdsParam = searchParams.get("ids");
+  const selectedProfileIds = selectedIdsParam
+    ? selectedIdsParam.split(",")
+    : [];
+
+  // Sync active tab with URL param
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && (tabParam === "incoming" || tabParam === "outgoing")) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
+
+  // For now, use work orders data or fallback to selected profiles
+  const incomingWorkOrdersData =
+    incomingWorkOrders.length > 0
+      ? incomingWorkOrders
+      : createWorkOrdersFromProfileIds(selectedProfileIds);
+
+  // Outgoing work orders data
+  const outgoingWorkOrdersData = outgoingWorkOrders.length > 0
+    ? outgoingWorkOrders
+    : [];
+
+  // Get unique work order numbers for the dropdown
+  const outgoingOrderNumbers = [...new Set(outgoingWorkOrdersData.map(wo => wo.orderNumber))];
   
-  // Get selected profile IDs from URL params
-  const selectedIdsParam = searchParams.get('ids');
-  const selectedProfileIds = selectedIdsParam ? selectedIdsParam.split(',') : [];
-  
-  // Filter profiles to show only selected ones
-  const shortlistedProfiles = collaborationProfiles.filter(profile =>
-    selectedProfileIds.includes(profile.id)
-  );
+  // Filter outgoing work orders by selected order number
+  const filteredOutgoingWorkOrders = selectedOutgoingOrder
+    ? outgoingWorkOrdersData.filter(wo => wo.orderNumber === selectedOutgoingOrder)
+    : outgoingWorkOrdersData;
+
+  // Set default selected order if not set
+  useEffect(() => {
+    if (activeTab === "outgoing" && !selectedOutgoingOrder && outgoingOrderNumbers.length > 0) {
+      setSelectedOutgoingOrder(outgoingOrderNumbers[0]);
+    }
+  }, [activeTab, selectedOutgoingOrder, outgoingOrderNumbers.length]);
+
+  const toggleAccordion = (workOrderId) => {
+    const newExpanded = new Set(expandedAccordions);
+    if (newExpanded.has(workOrderId)) {
+      newExpanded.delete(workOrderId);
+    } else {
+      newExpanded.add(workOrderId);
+    }
+    setExpandedAccordions(newExpanded);
+  };
 
   const handleBackClick = () => {
-    navigate('/dashboard/collaboration/list');
-  };
-
-  const handleAuctionClick = (profile) => {
-    setSelectedProfile(profile);
-    setShowAuctionModal(true);
-    setAuctionData({
-      minPrice: '',
-      maxPrice: '',
-      days: false,
-      hours: false,
-    });
-  };
-
-  const handleAuctionSubmit = (e) => {
-    e.preventDefault();
-    setShowAuctionModal(false);
-    setSuccessModalType('auction');
-    setShowSuccessModal(true);
-  };
-
-  const handleAuctionCancel = () => {
-    setShowAuctionModal(false);
-    setSelectedProfile(null);
-    setAuctionData({
-      minPrice: '',
-      maxPrice: '',
-      days: false,
-      hours: false,
-    });
-  };
-
-  const handleOfferClick = (profile) => {
-    setSelectedProfile(profile);
-    setShowOfferModal(true);
-    setOfferData({
-      currentValue: '',
-      endsIn: '',
-    });
-  };
-
-  const handleOfferSubmit = (e) => {
-    e.preventDefault();
-    setShowOfferModal(false);
-    setSuccessModalType('offer');
-    setShowSuccessModal(true);
-  };
-
-  const handleDealClick = (profile) => {
-    setSelectedProfile(profile);
-    setSuccessModalType('deal');
-    setShowSuccessModal(true);
-  };
-
-  const handleMessageClick = (profile) => {
-    setSelectedProfile(profile);
-    setShowMessageModal(true);
-    setMessageData({
-      name: '',
-      message: '',
-      file: null,
-    });
-  };
-
-  const handleMessageSubmit = (e) => {
-    e.preventDefault();
-    setShowMessageModal(false);
-    setSelectedProfile(null);
-    setMessageData({
-      name: '',
-      message: '',
-      file: null,
-    });
-  };
-
-  const handleMessageCancel = () => {
-    setShowMessageModal(false);
-    setSelectedProfile(null);
-    setMessageData({
-      name: '',
-      message: '',
-      file: null,
-    });
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setMessageData({ ...messageData, file });
-    }
-  };
-
-  const handleOfferCancel = () => {
-    setShowOfferModal(false);
-    setSelectedProfile(null);
-    setOfferData({
-      currentValue: '',
-      endsIn: '',
-    });
-  };
-
-  const handleSuccessClose = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setShowSuccessModal(false);
-    setSelectedProfile(null);
-    setSuccessModalType('auction');
+    navigate("/dashboard/collaboration/list");
   };
 
   return (
-    <div className="admin-page consultancy-page collaboration-page">
+    <div className="admin-page consultancy-page collaboration-page shortlisted-page">
       <div className="profile-edit-header">
-        <h1 className="admin-page-title">Shortlisted Collaborations</h1>
+        <h1 className="admin-page-title">Shortlisted</h1>
       </div>
 
-      <div className="collaboration-selection-header">
-        <div className="collaboration-selection-count">
-          {shortlistedProfiles.length} Profile{shortlistedProfiles.length !== 1 ? 's' : ''} Shortlisted
-        </div>
-        <a 
-          href="#"
-          className="collaboration-back-link"
-          onClick={(e) => {
-            e.preventDefault();
-            handleBackClick();
+      {/* Tabs - Using same structure as Profile Sell Page */}
+      <div className="transaction-tabs">
+        <button
+          className={`tab-btn ${activeTab === "incoming" ? "active" : ""}`}
+          onClick={() => {
+            setActiveTab("incoming");
+            navigate("/dashboard/collaboration/shortlisted?tab=incoming", {
+              replace: true,
+            });
           }}
         >
-          <i className="bi bi-arrow-left"></i> Back to List
-        </a>
+          Incoming ({incomingWorkOrdersData.length})
+        </button>
+        <button
+          className={`tab-btn ${activeTab === "outgoing" ? "active" : ""}`}
+          onClick={() => {
+            setActiveTab("outgoing");
+            navigate("/dashboard/collaboration/shortlisted?tab=outgoing", {
+              replace: true,
+            });
+          }}
+        >
+          Outgoing ({outgoingWorkOrdersData.length})
+        </button>
       </div>
+      {/* Tab Content */}
+      {activeTab === "incoming" && (
+        <div className="shortlisted-content">
+          {incomingWorkOrdersData.length === 0 ? (
+            <div className="text-center py-5">
+              <p className="text-muted">No incoming work orders yet.</p>
+            </div>
+          ) : (
+            <div className="shortlisted-cards-list">
+              {incomingWorkOrdersData.map((workOrder) => {
+                const profile = workOrder.profile;
+                if (!profile) return null;
 
-      {shortlistedProfiles.length === 0 ? (
-        <div className="text-center py-5">
-          <p className="text-muted">No profiles shortlisted yet.</p>
-        </div>
-      ) : (
-        <div className="consultancy-grid">
-          {shortlistedProfiles.map((profile) => (
-            <div
-              key={profile.id}
-              className="consultancy-card collaboration-card selected with-actions"
-            >
-              <div className="consultancy-card-header">
-                <div className="consultancy-avatar">
-                  <img src={profile.avatar} alt={profile.name} />
-                </div>
-                <div className="consultancy-card-meta">
-                  <h3 className="consultancy-card-name">{profile.name}</h3>
-                  <div className="consultancy-card-stats">
-                    <span className="consultancy-reach">{profile.reach} Reach</span>
-                    <span className="consultancy-rating">
-                      {profile.ratingLabel}
-                      <i className="bi bi-star-fill"></i>
-                    </span>
+                const isAccordionExpanded = expandedAccordions.has(
+                  workOrder.id
+                );
+
+                return (
+                  <div
+                    key={workOrder.id}
+                    className="shortlisted-work-order-group"
+                  >
+                    {/* Work Order Title */}
+                    <h2 className="work-order-title">
+                      Shortlisted for Work Order #{workOrder.orderNumber}
+                    </h2>
+
+                    {/* Card */}
+                    <div className={`shortlisted-card-full ${isAccordionExpanded ? "accordion-expanded" : ""}`}>
+                      <div className="shortlisted-card-header w-100 d-flex align-items-center justify-content-between">
+                        <div className="d-flex align-items-center gap-2">
+                          <div className="shortlisted-card-checkbox">
+                            <input type="checkbox" />
+                          </div>
+                          <div className="consultancy-avatar">
+                            <img src={profile.avatar} alt={profile.name} />
+                          </div>
+                          <div className="consultancy-card-meta">
+                            <h3 className="consultancy-card-name">
+                              {profile.name}
+                            </h3>
+                            <div className="consultancy-card-stats">
+                              <span className="consultancy-reach">
+                                {profile.reach} Reach
+                              </span>
+                              <span className="consultancy-rating">
+                                {profile.ratingLabel}
+                                <i className="bi bi-star-fill"></i>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        {/* Tags */}
+                        <div className="consultancy-card-tags">
+                          {profile.partner && (
+                            <span className="consultancy-tag">
+                              <i className="bi bi-briefcase"></i>
+                              {profile.partner}
+                            </span>
+                          )}
+                          {profile.designation && (
+                            <span className="consultancy-tag">
+                              <i className="bi bi-award"></i>
+                              {profile.designation}
+                            </span>
+                          )}
+                          {profile.experience && (
+                            <span className="consultancy-tag">
+                              <i className="bi bi-buildings"></i>
+                              {profile.experience}
+                            </span>
+                          )}
+                          {profile.location && (
+                            <span className="consultancy-tag">
+                              <i className="bi bi-geo-alt"></i>
+                              {profile.location}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <p className="consultancy-card-summary">
+                        {profile.summary}
+                      </p>
+                      <div className="w-100 border-0 d-flex align-items-center justify-content-between">                        {/* Asking Rates */}
+                        {profile.askingRates && (
+                          <div className="collaboration-asking-rates d-flex align-items-center gap-2 border-0">
+                            <span className="asking-rates-title">
+                              Asking Rate:
+                            </span>
+                            <div className="asking-rates-list d-flex align-items-center gap-2 flex-wrap">
+                              {profile.askingRates.post && (
+                                <div className="asking-rate-item">
+                                  <span className="asking-rate-label">
+                                    Post:
+                                  </span>
+                                  <span className="asking-rate-value">
+                                    {profile.askingRates.post}
+                                  </span>
+                                </div>
+                              )}
+                              {profile.askingRates.repost && (
+                                <div className="asking-rate-item">
+                                  <span className="asking-rate-label">
+                                    Repost:
+                                  </span>
+                                  <span className="asking-rate-value">
+                                    {profile.askingRates.repost}
+                                  </span>
+                                </div>
+                              )}
+                              {profile.askingRates.retweet && (
+                                <div className="asking-rate-item">
+                                  <span className="asking-rate-label">
+                                    Retweet:
+                                  </span>
+                                  <span className="asking-rate-value">
+                                    {profile.askingRates.retweet}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* More Actions Button and Accordion */}
+                        <div className="shortlisted-card-actions border-0 d-flex align-items-center justify-content-end">
+                          <button
+                            type="button"
+                            className="more-actions-btn btn-light"
+                            onClick={() => toggleAccordion(workOrder.id)}
+                          >
+                            More Actions
+                            <i
+                              className={`bi bi-chevron-${
+                                isAccordionExpanded ? "up" : "down"
+                              }`}
+                            ></i>
+                          </button>
+                        </div>
+                      </div>
+                      {/* Accordion Body */}
+                      {isAccordionExpanded && (
+                        <div className="more-actions-accordion">
+                          <div className="accordion-content">
+                            {/* Two sections in a row */}
+                            <div className="accordion-two-sections">
+                              {/* Section 1: Chat Window */}
+                              <div className="accordion-chat-section">
+                                <div className="chat-messages-container">
+                                  {chatMessages.map((message) => (
+                                    <div
+                                      key={message.id}
+                                      className={`chat-message ${
+                                        message.sender === "you"
+                                          ? "chat-message-outgoing"
+                                          : "chat-message-incoming"
+                                      }`}
+                                    >
+                                      <div className="chat-message-bubble">
+                                        <p className="chat-message-text">
+                                          {message.text.split("\n").map((line, idx) => (
+                                            <React.Fragment key={idx}>
+                                              {line}
+                                              {idx < message.text.split("\n").length - 1 && (
+                                                <br />
+                                              )}
+                                            </React.Fragment>
+                                          ))}
+                                        </p>
+                                        <div className="chat-message-footer">
+                                          <span className="chat-message-time">
+                                            {message.time}
+                                          </span>
+                                          <span className="chat-message-sender">
+                                            {message.sender === "you"
+                                              ? "You"
+                                              : message.senderName}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="chat-input-container">
+                                  <button
+                                    type="button"
+                                    className="chat-input-icon-btn"
+                                    title="Emoji"
+                                  >
+                                    <i className="bi bi-emoji-smile"></i>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="chat-input-icon-btn"
+                                    title="Attach"
+                                  >
+                                    <i className="bi bi-paperclip"></i>
+                                  </button>
+                                  <input
+                                    type="text"
+                                    className="chat-input-field"
+                                    placeholder="Type your message"
+                                  />
+                                  <button
+                                    type="button"
+                                    className="chat-input-icon-btn"
+                                    title="Voice"
+                                  >
+                                    <i className="bi bi-mic"></i>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="chat-send-btn"
+                                    title="Send"
+                                  >
+                                    <i className="bi bi-send"></i>
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Section 2: Price/Offer Form */}
+                              <div className="accordion-price-form-section">
+                                {/* Quoted Price Range */}
+                                <div className="price-form-item">
+                                  <h3 className="price-form-title">
+                                    Quoted Price Range
+                                  </h3>
+                                  <p className="price-form-description">
+                                    Lorem Ipsum is simply dummy text of the printing
+                                    and typesetting industry.
+                                  </p>
+                                  <div className="collaboration-range-wrapper" style={{ pointerEvents: "none" }}>
+                                    <div
+                                      className="collaboration-range-track"
+                                      style={{
+                                        position: "absolute",
+                                        top: "20px",
+                                        left: "0%",
+                                        width: "100%",
+                                        height: "6px",
+                                        background: "var(--admin-gray-100)",
+                                        borderRadius: "3px",
+                                        zIndex: 1,
+                                      }}
+                                    ></div>
+                                    <div
+                                      className="collaboration-range-active"
+                                      style={{
+                                        position: "absolute",
+                                        top: "20px",
+                                        left: "0%",
+                                        width: "50%",
+                                        height: "6px",
+                                        background: "#066daf",
+                                        borderRadius: "3px",
+                                        zIndex: 1,
+                                      }}
+                                    ></div>
+                                    <input
+                                      type="range"
+                                      min={0}
+                                      max={1000}
+                                      value={500}
+                                      disabled
+                                      className="collaboration-range-input m-0"
+                                      style={{
+                                        position: "absolute",
+                                        width: "100%",
+                                        zIndex: 2,
+                                        opacity: 1,
+                                      }}
+                                    />
+                                    <div
+                                      className="collaboration-range-value"
+                                      style={{
+                                        left: "50%",
+                                        top: "-16px",
+                                        zIndex: 4,
+                                      }}
+                                    >
+                                      $500
+                                    </div>
+                                  </div>
+                                  <input
+                                    type="text"
+                                    className="form-input-group"
+                                    value="$500"
+                                    disabled
+                                  />
+                                </div>
+
+                                {/* Offer Price */}
+                                <div className="price-form-item">
+                                  <h3 className="price-form-title">Offer Price</h3>
+                                  <div className="offer-price-input-wrapper">
+                                    {/* <input
+                                      type="text"
+                                      className="form-input-group offer-price-input"
+                                      value={`${offerPrice} | ${offerDateTime}`}
+                                      readOnly
+                                      onClick={() => {
+                                        // This will be a clickable selector
+                                        // For now, just a placeholder
+                                      }}
+                                      style={{ cursor: "pointer" }}
+                                    />
+                                    <i className="bi bi-chevron-down offer-price-arrow"></i> */}
+
+                                    <select name="" id="" className="form-input-group offer-price-input">
+                                      <option value="$500">$500 (24-10-2025 | 03:45 PM)</option>
+                                      <option value="$1000">$1000 (24-10-2025 | 03:45 PM)</option>
+                                      <option value="$1500">$1500 (24-10-2025 | 03:45 PM)</option>
+                                      <option value="$2000">$2000 (24-10-2025 | 03:45 PM)</option>
+                                      <option value="$2500">$2500 (24-10-2025 | 03:45 PM)</option>
+                                      <option value="$3000">$3000 (24-10-2025 | 03:45 PM)</option>
+                                    </select>
+                                  </div>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div
+                                  className="price-form-actions"
+                                  style={{
+                                    display: "flex",
+                                    gap: "12px",
+                                    marginTop: "8px",
+                                  }}
+                                >
+                                  <button
+                                    type="button"
+                                    className="dark-btn price-form-btn"
+                                    onClick={() => setShowAuctionInfluencerModal(true)}
+                                  >
+                                    Offer
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn-success price-form-btn"
+                                    onClick={() => setShowAuctionCollaboratorModal(true)}
+                                  >
+                                    Accept
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
-              <div className="consultancy-card-tags">
-                {profile.tags.map((tag, index) => (
-                  <span key={index} className="consultancy-tag">
-                    {tag.label}: {tag.value}
-                  </span>
-                ))}
-              </div>
-
-              <p className="consultancy-card-summary">{profile.summary}</p>
-
-              <div className="collaboration-card-actions">
-                <div className="collaboration-action-buttons">
-                  <button 
-                    type="button" 
-                    className="btn-dark collaboration-action-btn"
-                    onClick={() => handleAuctionClick(profile)}
-                  >
-                    Auction
-                  </button>
-                  <button 
-                    type="button" 
-                    className="btn-light collaboration-action-btn"
-                    onClick={() => handleOfferClick(profile)}
-                  >
-                    Offer
-                  </button>
-                  <button 
-                    type="button" 
-                    className="btn-light collaboration-action-btn"
-                    onClick={() => handleDealClick(profile)}
-                  >
-                    Deal
-                  </button>
-                </div>
-                <button 
-                  type="button" 
-                  className="collaboration-message-btn"
-                  aria-label="Message"
-                  onClick={() => handleMessageClick(profile)}
+      {activeTab === "outgoing" && (
+        <div className="shortlisted-content">
+          {outgoingWorkOrdersData.length === 0 ? (
+            <div className="text-center py-5">
+              <p className="text-muted">No outgoing work orders yet.</p>
+            </div>
+          ) : (
+            <>
+              {/* Work Order Selector */}
+              <div className="outgoing-work-order-selector">
+                <label className="work-order-select-label">
+                  Shortlisted for Work Order:
+                </label>
+                <select
+                  className="work-order-select"
+                  value={selectedOutgoingOrder}
+                  onChange={(e) => setSelectedOutgoingOrder(e.target.value)}
                 >
-                  <i className="bi bi-chat-dots"></i>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Auction Modal */}
-      {showAuctionModal && selectedProfile && (
-        <div className="modal-overlay" onClick={handleAuctionCancel}>
-          <div className="modal-container add-funds-modal" onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="modal-close" onClick={handleAuctionCancel}>
-              <i className="bi bi-x"></i>
-            </button>
-            
-            <h2 className="modal-title">Auction as Collaborator</h2>
-            
-            <form onSubmit={handleAuctionSubmit}>
-              <div className="add-funds-section">
-                <label className="form-label">Price bid</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                  <div className="form-input-group">
-                    <input
-                      type="number"
-                      placeholder="Min"
-                      value={auctionData.minPrice}
-                      onChange={(e) => setAuctionData({ ...auctionData, minPrice: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="form-input-group">
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      value={auctionData.maxPrice}
-                      onChange={(e) => setAuctionData({ ...auctionData, maxPrice: e.target.value })}
-                      required
-                    />
-                  </div>
-                </div>
+                  {outgoingOrderNumbers.map((orderNum) => (
+                    <option key={orderNum} value={orderNum}>
+                      #{orderNum}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="add-funds-section">
-                <div style={{ display: 'flex', gap: '16px' }}>
-                  <label className="collaboration-checkbox-label m-0">
-                    <input
-                      type="checkbox"
-                      checked={auctionData.days}
-                      onChange={(e) => setAuctionData({ ...auctionData, days: e.target.checked })}
-                    />
-                    <span>Days</span>
-                  </label>
-                  <label className="collaboration-checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={auctionData.hours}
-                      onChange={(e) => setAuctionData({ ...auctionData, hours: e.target.checked })}
-                    />
-                    <span>Hours</span>
-                  </label>
-                </div>
-              </div>
-
-              <p style={{ fontSize: '12px', color: '#666', marginTop: '-8px', marginBottom: '16px' }}>
-                ( If no one bid, auction gets cancelled. )
-              </p>
-
-              <div className="modal-footer">
-              <button type="submit" className="btn-dark">
-                  Submit
-                </button>
-                <button type="button" className="btn-light" onClick={handleAuctionCancel}>
-                  Cancel
-                </button>
-                
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Offer Modal */}
-      {showOfferModal && selectedProfile && (
-        <div className="modal-overlay" onClick={handleOfferCancel}>
-          <div className="modal-container add-funds-modal" onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="modal-close" onClick={handleOfferCancel}>
-              <i className="bi bi-x"></i>
-            </button>
-            
-            <h2 className="modal-title">Auction as Influencer</h2>
-            
-            <form onSubmit={handleOfferSubmit}>
-              <div className="add-funds-section">
-                <label className="form-label">Current Value</label>
-                <div className="form-input-group">
+              {/* Checkbox and Sort By Filter */}
+              <div className="outgoing-actions-bar">
+                <label className="setup-bid-checkbox">
                   <input
-                    type="number"
-                    placeholder="Enter current value"
-                    value={offerData.currentValue}
-                    onChange={(e) => setOfferData({ ...offerData, currentValue: e.target.value })}
-                    required
+                    type="checkbox"
+                    checked={setupBidBetween}
+                    onChange={(e) => setSetupBidBetween(e.target.checked)}
                   />
+                  <span>Setup bid between shortlisted results</span>
+                </label>
+                <div className="sort-by-filter">
+                  <label className="sort-by-label">Sort By:</label>
+                  <select
+                    className="sort-by-select"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                  >
+                    <option value="price-low-to-high">Price Low to High</option>
+                    <option value="price-high-to-low">Price High to Low</option>
+                    <option value="name-a-z">Name A-Z</option>
+                    <option value="name-z-a">Name Z-A</option>
+                    <option value="reach-high-to-low">Reach High to Low</option>
+                    <option value="reach-low-to-high">Reach Low to High</option>
+                  </select>
                 </div>
               </div>
 
-              <div className="add-funds-section">
-                <label className="form-label">Ends In</label>
-                <div className="form-input-group">
-                  <input
-                    type="number"
-                    placeholder="Enter number"
-                    value={offerData.endsIn}
-                    onChange={(e) => setOfferData({ ...offerData, endsIn: e.target.value })}
-                    required
-                  />
-                </div>
-                <p style={{ fontSize: '12px', color: '#666', marginTop: '8px', marginBottom: '0' }}>
-                  Mins date xtime
-                </p>
-              </div>
+              {/* Cards List - Same as Incoming */}
+              <div className="shortlisted-cards-list">
+                {filteredOutgoingWorkOrders.map((workOrder) => {
+                  const profile = workOrder.profile;
+                  if (!profile) return null;
 
-              <div className="modal-footer">
-                <button type="submit" className="btn-dark">
-                  Place bid
-                </button>
-                <button type="button" className="btn-light" onClick={handleOfferCancel}>
-                  Cancel
-                </button>
+                  const isAccordionExpanded = expandedAccordions.has(
+                    workOrder.id
+                  );
+
+                  return (
+                    <div
+                      key={workOrder.id}
+                      className="shortlisted-work-order-group"
+                    >
+                      {/* Card - Same structure as Incoming */}
+                      <div className={`shortlisted-card-full ${isAccordionExpanded ? "accordion-expanded" : ""}`}>
+                        <div className="shortlisted-card-header w-100 d-flex align-items-center justify-content-between">
+                          <div className="d-flex align-items-center gap-2">
+                            <div className="shortlisted-card-checkbox">
+                              <input type="checkbox" />
+                            </div>
+                            <div className="consultancy-avatar">
+                              <img src={profile.avatar} alt={profile.name} />
+                            </div>
+                            <div className="consultancy-card-meta">
+                              <h3 className="consultancy-card-name">
+                                {profile.name}
+                              </h3>
+                              <div className="consultancy-card-stats">
+                                <span className="consultancy-reach">
+                                  {profile.reach} Reach
+                                </span>
+                                <span className="consultancy-rating">
+                                  {profile.ratingLabel}
+                                  <i className="bi bi-star-fill"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          {/* Tags */}
+                          <div className="consultancy-card-tags">
+                            {profile.partner && (
+                              <span className="consultancy-tag">
+                                <i className="bi bi-briefcase"></i>
+                                {profile.partner}
+                              </span>
+                            )}
+                            {profile.designation && (
+                              <span className="consultancy-tag">
+                                <i className="bi bi-award"></i>
+                                {profile.designation}
+                              </span>
+                            )}
+                            {profile.experience && (
+                              <span className="consultancy-tag">
+                                <i className="bi bi-buildings"></i>
+                                {profile.experience}
+                              </span>
+                            )}
+                            {profile.location && (
+                              <span className="consultancy-tag">
+                                <i className="bi bi-geo-alt"></i>
+                                {profile.location}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <p className="consultancy-card-summary">
+                          {profile.summary}
+                        </p>
+                        <div className="w-100 border-0 d-flex align-items-center justify-content-between">
+                          {/* Asking Rates */}
+                          {profile.askingRates && (
+                            <div className="collaboration-asking-rates d-flex align-items-center gap-2 border-0">
+                              <span className="asking-rates-title">
+                                Asking Rate:
+                              </span>
+                              <div className="asking-rates-list d-flex align-items-center gap-2 flex-wrap">
+                                {profile.askingRates.post && (
+                                  <div className="asking-rate-item">
+                                    <span className="asking-rate-label">
+                                      Post:
+                                    </span>
+                                    <span className="asking-rate-value">
+                                      {profile.askingRates.post}
+                                    </span>
+                                  </div>
+                                )}
+                                {profile.askingRates.repost && (
+                                  <div className="asking-rate-item">
+                                    <span className="asking-rate-label">
+                                      Repost:
+                                    </span>
+                                    <span className="asking-rate-value">
+                                      {profile.askingRates.repost}
+                                    </span>
+                                  </div>
+                                )}
+                                {profile.askingRates.retweet && (
+                                  <div className="asking-rate-item">
+                                    <span className="asking-rate-label">
+                                      Retweet:
+                                    </span>
+                                    <span className="asking-rate-value">
+                                      {profile.askingRates.retweet}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* More Actions Button */}
+                          <div className="shortlisted-card-actions border-0 d-flex align-items-center justify-content-end">
+                            <button
+                              type="button"
+                              className="more-actions-btn btn-light"
+                              onClick={() => toggleAccordion(workOrder.id)}
+                            >
+                              More Actions
+                              <i
+                                className={`bi bi-chevron-${
+                                  isAccordionExpanded ? "up" : "down"
+                                }`}
+                              ></i>
+                            </button>
+                          </div>
+                        </div>
+                        {/* Accordion Body - Same as Incoming */}
+                        {isAccordionExpanded && (
+                          <div className="more-actions-accordion">
+                            <div className="accordion-content">
+                              {/* Two sections in a row */}
+                              <div className="accordion-two-sections">
+                                {/* Section 1: Chat Window */}
+                                <div className="accordion-chat-section">
+                                  <div className="chat-messages-container">
+                                    {chatMessages.map((message) => (
+                                      <div
+                                        key={message.id}
+                                        className={`chat-message ${
+                                          message.sender === "you"
+                                            ? "chat-message-outgoing"
+                                            : "chat-message-incoming"
+                                        }`}
+                                      >
+                                        <div className="chat-message-bubble">
+                                          <p className="chat-message-text">
+                                            {message.text.split("\n").map((line, idx) => (
+                                              <React.Fragment key={idx}>
+                                                {line}
+                                                {idx < message.text.split("\n").length - 1 && (
+                                                  <br />
+                                                )}
+                                              </React.Fragment>
+                                            ))}
+                                          </p>
+                                          <div className="chat-message-footer">
+                                            <span className="chat-message-time">
+                                              {message.time}
+                                            </span>
+                                            <span className="chat-message-sender">
+                                              {message.sender === "you"
+                                                ? "You"
+                                                : message.senderName}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="chat-input-container">
+                                    <button
+                                      type="button"
+                                      className="chat-input-icon-btn"
+                                      title="Emoji"
+                                    >
+                                      <i className="bi bi-emoji-smile"></i>
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="chat-input-icon-btn"
+                                      title="Attach"
+                                    >
+                                      <i className="bi bi-paperclip"></i>
+                                    </button>
+                                    <input
+                                      type="text"
+                                      className="chat-input-field"
+                                      placeholder="Type your message"
+                                    />
+                                    <button
+                                      type="button"
+                                      className="chat-input-icon-btn"
+                                      title="Voice"
+                                    >
+                                      <i className="bi bi-mic"></i>
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="chat-send-btn"
+                                      title="Send"
+                                    >
+                                      <i className="bi bi-send"></i>
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Section 2: Price/Offer Form */}
+                                <div className="accordion-price-form-section">
+                                  {/* Quoted Price Range */}
+                                  <div className="price-form-item">
+                                    <h3 className="price-form-title">
+                                      Quoted Price Range
+                                    </h3>
+                                    <p className="price-form-description">
+                                      Lorem Ipsum is simply dummy text of the printing
+                                      and typesetting industry.
+                                    </p>
+                                    <div className="collaboration-range-wrapper" style={{ pointerEvents: "none" }}>
+                                      <div
+                                        className="collaboration-range-track"
+                                        style={{
+                                          position: "absolute",
+                                          top: "20px",
+                                          left: "0%",
+                                          width: "100%",
+                                          height: "6px",
+                                          background: "var(--admin-gray-100)",
+                                          borderRadius: "3px",
+                                          zIndex: 1,
+                                        }}
+                                      ></div>
+                                      <div
+                                        className="collaboration-range-active"
+                                        style={{
+                                          position: "absolute",
+                                          top: "20px",
+                                          left: "0%",
+                                          width: "50%",
+                                          height: "6px",
+                                          background: "#066daf",
+                                          borderRadius: "3px",
+                                          zIndex: 1,
+                                        }}
+                                      ></div>
+                                      <input
+                                        type="range"
+                                        min={0}
+                                        max={1000}
+                                        value={500}
+                                        disabled
+                                        className="collaboration-range-input m-0"
+                                        style={{
+                                          position: "absolute",
+                                          width: "100%",
+                                          zIndex: 2,
+                                          opacity: 1,
+                                        }}
+                                      />
+                                      <div
+                                        className="collaboration-range-value"
+                                        style={{
+                                          left: "50%",
+                                          top: "-16px",
+                                          zIndex: 4,
+                                        }}
+                                      >
+                                        $500
+                                      </div>
+                                    </div>
+                                    <input
+                                      type="text"
+                                      className="form-input-group"
+                                      value="$500"
+                                      disabled
+                                    />
+                                  </div>
+
+                                  {/* Offer Price */}
+                                  <div className="price-form-item">
+                                    <h3 className="price-form-title">Offer Price</h3>
+                                    <div className="offer-price-input-wrapper">
+                                      <select name="" id="" className="form-input-group offer-price-input">
+                                        <option value="$500">$500 (24-10-2025 | 03:45 PM)</option>
+                                        <option value="$1000">$1000 (24-10-2025 | 03:45 PM)</option>
+                                        <option value="$1500">$1500 (24-10-2025 | 03:45 PM)</option>
+                                        <option value="$2000">$2000 (24-10-2025 | 03:45 PM)</option>
+                                        <option value="$2500">$2500 (24-10-2025 | 03:45 PM)</option>
+                                        <option value="$3000">$3000 (24-10-2025 | 03:45 PM)</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  {/* Action Buttons */}
+                                  <div
+                                    className="price-form-actions"
+                                    style={{
+                                      display: "flex",
+                                      gap: "12px",
+                                      marginTop: "8px",
+                                    }}
+                                  >
+                                    <button
+                                      type="button"
+                                      className="dark-btn price-form-btn"
+                                      onClick={() => setShowAuctionInfluencerModal(true)}
+                                    >
+                                      Offer
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn-success price-form-btn"
+                                      onClick={() => setShowAuctionCollaboratorModal(true)}
+                                    >
+                                      Accept
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            </form>
-          </div>
+            </>
+          )}
         </div>
       )}
 
-      {/* Message Modal */}
-      {showMessageModal && selectedProfile && (
-        <div className="modal-overlay" onClick={handleMessageCancel}>
-          <div className="modal-container add-funds-modal" onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="modal-close" onClick={handleMessageCancel}>
-              <i className="bi bi-x"></i>
-            </button>
-            
-            <h2 className="modal-title">Send Message</h2>
-            
-            <form onSubmit={handleMessageSubmit}>
-              <div className="add-funds-section">
-                <label className="form-label">Name</label>
-                <div className="form-input-group">
-                  <input
-                    type="text"
-                    placeholder="Enter your name"
-                    value={messageData.name}
-                    onChange={(e) => setMessageData({ ...messageData, name: e.target.value })}
-                    required
-                  />
-                </div>
-              </div>
+      {/* Auction as Influencer Modal */}
+      <AuctionInfluencerModal
+        show={showAuctionInfluencerModal}
+        onClose={() => setShowAuctionInfluencerModal(false)}
+      />
 
-              <div className="add-funds-section">
-                <label className="form-label">Message</label>
-                <div className="form-input-group" style={{ alignItems: 'flex-start', minHeight: '100px' }}>
-                  <textarea
-                    placeholder="Enter your message"
-                    value={messageData.message}
-                    onChange={(e) => setMessageData({ ...messageData, message: e.target.value })}
-                    rows="4"
-                    required
-                    style={{ 
-                      flex: 1,
-                      border: 'none', 
-                      outline: 'none',
-                      resize: 'vertical',
-                      fontFamily: 'inherit',
-                      fontSize: '14px',
-                      padding: '0',
-                      background: 'transparent',
-                      minHeight: '80px'
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="add-funds-section">
-                <label className="form-label">Upload File</label>
-                <div className="file-upload">
-                  <input
-                    type="file"
-                    id="messageFile"
-                    className="file-input"
-                    onChange={handleFileChange}
-                  />
-                  <label htmlFor="messageFile" className="file-upload-label">
-                    <i className="bi bi-cloud-arrow-up"></i>
-                    <span>{messageData.file ? messageData.file.name : 'Choose File'}</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="modal-footer">
-                <button type="submit" className="btn-dark">
-                  Submit
-                </button>
-                <button type="button" className="btn-light" onClick={handleMessageCancel}>
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <div className="modal-overlay" onClick={handleSuccessClose}>
-          <div className="modal-container pt-0 w-100 payment-result-modal" onClick={(e) => e.stopPropagation()}>
-            <button 
-              type="button" 
-              className="modal-close" 
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleSuccessClose();
-              }}
-            >
-              <i className="bi bi-x"></i>
-            </button>
-            
-            <div className="payment-result-content mt-0">
-              <div className="payment-result-icon success">
-                <i className="bi bi-check-circle-fill"></i>
-              </div>
-              <h2 className="payment-result-title text-dark">
-                {successModalType === 'auction' && 'Auction Created Successfully!'}
-                {successModalType === 'offer' && 'Offer Placed Successfully!'}
-                {successModalType === 'deal' && 'Deal Accepted Successfully!'}
-              </h2>
-              <p className="payment-result-message">
-                {successModalType === 'auction' && 'Your auction has been created and is now live.'}
-                {successModalType === 'offer' && 'Your offer has been placed successfully and is now active.'}
-                {successModalType === 'deal' && 'Congratulations! The deal has been accepted and you can now proceed with the collaboration.'}
-              </p>
-              {/* <button type="button" className="btn-dark" onClick={handleSuccessClose}>
-                OK
-              </button> */}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Auction as Collaborator Modal */}
+      <AuctionCollaboratorModal
+        show={showAuctionCollaboratorModal}
+        onClose={() => setShowAuctionCollaboratorModal(false)}
+      />
     </div>
   );
 };
 
 export default CollaborationShortlisted;
-

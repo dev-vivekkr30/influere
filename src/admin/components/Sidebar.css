@@ -213,6 +213,18 @@
   font-weight: 700 !important;
 }
 
+/* Nested children (children of children) */
+.admin-nav-children .admin-nav-children {
+  background-color: var(--admin-white-300);
+  margin-left: var(--admin-space-4);
+  margin-top: var(--admin-space-1);
+}
+
+.admin-nav-children .admin-nav-children .admin-nav-link {
+  font-size: var(--admin-font-size-xs);
+  padding: 6px 10px !important;
+}
+
 /* Sidebar Footer */
 .admin-sidebar-footer {
   padding: var(--admin-space-6);
