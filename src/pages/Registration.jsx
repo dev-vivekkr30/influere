@@ -13,31 +13,38 @@ import RegistrationLayout from '../layouts/RegistrationLayout';
 const Registration = () => {
   usePageTitle("Registration");
   const [currentStep, setCurrentStep] = useState(1);
+  // Calculate default date (tomorrow)
+  const getDefaultDate = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
+  };
+
   const [formData, setFormData] = useState({
     // Step 1: Create Profile
-    firstName: '',
-    lastName: '',
-    email: '',
-    contactNumber: '',
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+    contactNumber: '+1234567890',
     
-    // Step 2: Verify Identity
-    nationality: '',
-    countryId: '',
-    idType1: '',
-    idFile1: null,
+    // Step 2: Verify Identityed
+    nationality: 'indian',
+    countryId: 'aadhaar',
+    idType1: 'aadhaar',
+    idFile1: null, // File cannot be prefilled
     idType2: '',
     idFile2: null,
     
     // Step 3: Finalize Account
-    termsAccepted: false,
+    termsAccepted: true,
     
     // Step 4: Video Call
-    videoMode: '',
-    selectedDate: '',
-    selectedTime: '',
+    videoMode: 'zoom',
+    selectedDate: getDefaultDate(),
+    selectedTime: '09:00 AM',
     
     // Step 5: Select Membership
-    membershipType: ''
+    membershipType: 'basic'
   });
 
   const steps = [
