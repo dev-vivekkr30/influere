@@ -111,25 +111,25 @@ const defaultNavigationItems = [
         path: '/dashboard/collaboration/setup',
       },
       {
-        id: 'collaboration-list',
-        label: 'Facebook',
-        path: '/dashboard/collaboration/list',
+            id: 'collaboration-list',
+            label: 'Facebook',
+            path: '/dashboard/collaboration/list',
         navigateWithChildren: true,
-        children: [
-          {
-            id: 'collaboration-shortlisted',
-            label: 'Shortlisted',
-            path: '/dashboard/collaboration/shortlisted',
             children: [
               {
-                id: 'shortlisted-incoming',
-                label: 'Incoming',
-                path: '/dashboard/collaboration/shortlisted?tab=incoming',
-              },
-              {
-                id: 'shortlisted-outgoing',
-                label: 'Outgoing',
-                path: '/dashboard/collaboration/shortlisted?tab=outgoing',
+                id: 'collaboration-shortlisted',
+                label: 'Shortlisted',
+                path: '/dashboard/collaboration/shortlisted',
+                children: [
+                  {
+                    id: 'shortlisted-incoming',
+                    label: 'Incoming',
+                    path: '/dashboard/collaboration/shortlisted?tab=incoming',
+                  },
+                  {
+                    id: 'shortlisted-outgoing',
+                    label: 'Outgoing',
+                    path: '/dashboard/collaboration/shortlisted?tab=outgoing',
               },
             ],
           },

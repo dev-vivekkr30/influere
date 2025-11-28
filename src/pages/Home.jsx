@@ -89,7 +89,7 @@ const Home = () => {
               <img src={Icon10} className="icon" alt="" />
               <h3>Professional Liability Insurance</h3>
               <div className="subtitle">
-                Safeguard yourself or your company from Legal lawsuits and and
+              Safeguard yourself or your company from Legal lawsuits and and
                 protect yourself from financial claims from our varied insurance
                 policy packages to suite your needs.
               </div>
@@ -186,7 +186,7 @@ const Home = () => {
               <img src={Icon4} className="icon" alt="" />
               <h3>Collaborate</h3>
               <div className="subtitle">
-                Our most valued service for your growth. Use our repository to
+              Our most valued service for your growth. Use our repository to
                 connect with like minded creators. Use your credits to request
                 networking opportunities and cross promotion.
               </div>

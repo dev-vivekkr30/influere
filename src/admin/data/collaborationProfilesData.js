@@ -23,7 +23,7 @@ export const collaborationProfiles = [
   {
     id: 'suryoday-bank-2',
     name: 'Priya Sharma',
-    avatar: consultancyData.legal.professionals[0].avatar,
+    avatar: consultancyData.legal.professionals[1].avatar,
     reach: '869k',
     rating: 4.5,
     ratingLabel: '4.5',
@@ -42,7 +42,7 @@ export const collaborationProfiles = [
   {
     id: 'suryoday-bank-3',
     name: 'Amit Patel',
-    avatar: consultancyData.legal.professionals[0].avatar,
+    avatar: consultancyData.legal.professionals[2].avatar,
     reach: '869k',
     rating: 4.5,
     ratingLabel: '4.5',
@@ -80,7 +80,7 @@ export const collaborationProfiles = [
   {
     id: 'profile-5',
     name: 'Meera Desai',
-    avatar: consultancyData.legal.professionals[0].avatar,
+    avatar: consultancyData.legal.professionals[1].avatar,
     reach: '650k',
     rating: 4.6,
     ratingLabel: '4.6',
@@ -99,7 +99,7 @@ export const collaborationProfiles = [
   {
     id: 'profile-6',
     name: 'David Chen',
-    avatar: consultancyData.legal.professionals[0].avatar,
+    avatar: consultancyData.legal.professionals[2].avatar,
     reach: '950k',
     rating: 4.7,
     ratingLabel: '4.7',
@@ -137,7 +137,7 @@ export const collaborationProfiles = [
   {
     id: 'profile-8',
     name: 'Michael Thompson',
-    avatar: consultancyData.legal.professionals[0].avatar,
+    avatar: consultancyData.legal.professionals[1].avatar,
     reach: '1.5M',
     rating: 4.9,
     ratingLabel: '4.9',
@@ -156,7 +156,7 @@ export const collaborationProfiles = [
   {
     id: 'profile-9',
     name: 'Kavya Nair',
-    avatar: consultancyData.legal.professionals[0].avatar,
+    avatar: consultancyData.legal.professionals[2].avatar,
     reach: '1.8M',
     rating: 4.8,
     ratingLabel: '4.8',

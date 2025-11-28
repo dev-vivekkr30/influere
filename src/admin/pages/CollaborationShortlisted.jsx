@@ -400,8 +400,8 @@ const CollaborationShortlisted = () => {
                                       style={{
                                         position: "absolute",
                                         top: "20px",
-                                        left: "0%",
-                                        width: "50%",
+                                        left: "30%",
+                                        width: "40%",
                                         height: "6px",
                                         background: "#066daf",
                                         borderRadius: "3px",
@@ -412,7 +412,7 @@ const CollaborationShortlisted = () => {
                                       type="range"
                                       min={0}
                                       max={1000}
-                                      value={500}
+                                      value={300}
                                       disabled
                                       className="collaboration-range-input m-0"
                                       style={{
@@ -422,21 +422,45 @@ const CollaborationShortlisted = () => {
                                         opacity: 1,
                                       }}
                                     />
+                                    <input
+                                      type="range"
+                                      min={0}
+                                      max={1000}
+                                      value={700}
+                                      disabled
+                                      className="collaboration-range-input m-0"
+                                      style={{
+                                        position: "absolute",
+                                        width: "100%",
+                                        zIndex: 3,
+                                        opacity: 1,
+                                      }}
+                                    />
                                     <div
                                       className="collaboration-range-value"
                                       style={{
-                                        left: "50%",
+                                        left: "30%",
                                         top: "-16px",
                                         zIndex: 4,
                                       }}
                                     >
-                                      $500
+                                      $300
+                                    </div>
+                                    <div
+                                      className="collaboration-range-value"
+                                      style={{
+                                        left: "70%",
+                                        top: "-16px",
+                                        zIndex: 4,
+                                      }}
+                                    >
+                                      $700
                                     </div>
                                   </div>
                                   <input
                                     type="text"
                                     className="form-input-group"
-                                    value="$500"
+                                    value="$300 - $700"
                                     disabled
                                   />
                                 </div>
@@ -856,8 +880,8 @@ const CollaborationShortlisted = () => {
                                         style={{
                                           position: "absolute",
                                           top: "20px",
-                                          left: "0%",
-                                          width: "50%",
+                                          left: "30%",
+                                          width: "40%",
                                           height: "6px",
                                           background: "#066daf",
                                           borderRadius: "3px",
@@ -868,7 +892,7 @@ const CollaborationShortlisted = () => {
                                         type="range"
                                         min={0}
                                         max={1000}
-                                        value={500}
+                                        value={300}
                                         disabled
                                         className="collaboration-range-input m-0"
                                         style={{
@@ -878,21 +902,45 @@ const CollaborationShortlisted = () => {
                                           opacity: 1,
                                         }}
                                       />
+                                      <input
+                                        type="range"
+                                        min={0}
+                                        max={1000}
+                                        value={700}
+                                        disabled
+                                        className="collaboration-range-input m-0"
+                                        style={{
+                                          position: "absolute",
+                                          width: "100%",
+                                          zIndex: 3,
+                                          opacity: 1,
+                                        }}
+                                      />
                                       <div
                                         className="collaboration-range-value"
                                         style={{
-                                          left: "50%",
+                                          left: "30%",
                                           top: "-16px",
                                           zIndex: 4,
                                         }}
                                       >
-                                        $500
+                                        $300
+                                      </div>
+                                      <div
+                                        className="collaboration-range-value"
+                                        style={{
+                                          left: "70%",
+                                          top: "-16px",
+                                          zIndex: 4,
+                                        }}
+                                      >
+                                        $700
                                       </div>
                                     </div>
                                     <input
                                       type="text"
                                       className="form-input-group"
-                                      value="$500"
+                                      value="$300 - $700"
                                       disabled
                                     />
                                   </div>

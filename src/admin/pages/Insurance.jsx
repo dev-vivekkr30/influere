@@ -4,6 +4,7 @@ import {
   insuranceOffers,
   insuranceFilters,
 } from "../data/discountOffersData";
+import SliderDropdown from "../components/SliderDropdown";
 import "./Wallet.css";
 import "./DiscountOffers.css";
 
@@ -12,6 +13,7 @@ const Insurance = () => {
   const [expandedInsurance, setExpandedInsurance] = useState(
     insuranceOffers[0]?.id || null
   );
+  const [deductibleValue, setDeductibleValue] = useState(0);
 
   return (
     <div className="admin-page discount-offers-page">
@@ -22,7 +24,20 @@ const Insurance = () => {
 
         <div className="dashboard-table-section discount-insurance-panel">
           <div className="consultancy-filters">
-            {insuranceFilters.map((filter) => (
+            {/* Deductible Slider Dropdown */}
+            <SliderDropdown
+              label="Deductible"
+              placeholder="Select Deductible"
+              min={0}
+              max={1000000}
+              step={1000}
+              prefix="$"
+              value={deductibleValue}
+              onChange={(value) => setDeductibleValue(value)}
+            />
+            
+            {/* Other filters as regular dropdowns */}
+            {insuranceFilters.filter(filter => filter.id !== 'deductible').map((filter) => (
               <div key={filter.id} className="consultancy-filter">
                 <span className="consultancy-filter-label">{filter.label}</span>
                 <div className="consultancy-select">

@@ -5,6 +5,7 @@ import consultancyData from '../data/consultancyData';
 import ConsultancyUserModal from '../components/ConsultancyUserModal';
 import ConsultancyBookingModal from '../components/ConsultancyBookingModal';
 import SliderDropdown from '../components/SliderDropdown';
+import RangeSliderDropdown from '../components/RangeSliderDropdown';
 import './ConsultancyCategoryPage.css';
 
 const DEFAULT_CATEGORY = 'legal';
@@ -55,6 +56,14 @@ const ConsultancyCategoryPage = () => {
     }));
   };
 
+  const handleRangeChange = (filterId, range) => {
+    setFilterValues(prev => ({
+      ...prev,
+      [`${filterId}_min`]: range.min,
+      [`${filterId}_max`]: range.max
+    }));
+  };
+
   const getFilterValue = (filter) => {
     if (filterValues[filter.id] !== undefined) {
       return filterValues[filter.id];
@@ -65,7 +74,36 @@ const ConsultancyCategoryPage = () => {
     return '';
   };
 
+  const getRangeValues = (filter) => {
+    const minKey = `${filter.id}_min`;
+    const maxKey = `${filter.id}_max`;
+    return {
+      min: filterValues[minKey] !== undefined ? filterValues[minKey] : filter.min,
+      max: filterValues[maxKey] !== undefined ? filterValues[maxKey] : filter.max
+    };
+  };
+
   const renderFilter = (filter) => {
+    // Use RangeSliderDropdown for rate-per-hour filters
+    if (filter.id === 'rate-per-hour') {
+      const rangeValues = getRangeValues(filter);
+      return (
+        <RangeSliderDropdown
+          key={filter.id}
+          label={filter.label}
+          placeholder={filter.placeholder}
+          min={filter.min}
+          max={filter.max}
+          step={filter.step || 100}
+          prefix={filter.prefix || ''}
+          suffix={filter.suffix || ''}
+          minValue={rangeValues.min}
+          maxValue={rangeValues.max}
+          onChange={(range) => handleRangeChange(filter.id, range)}
+        />
+      );
+    }
+
     if (filter.type === 'slider') {
       return (
         <SliderDropdown

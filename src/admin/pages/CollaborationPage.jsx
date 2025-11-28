@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import { collaborationProfiles } from "../data/collaborationProfilesData";
+import SliderDropdown from "../components/SliderDropdown";
 import "../components/ConsultancyModals.css";
 import "./ConsultancyCategoryPage.css";
 import "./CollaborationPage.css";
@@ -15,10 +16,10 @@ const CollaborationPage = () => {
   const [workOrderDescription, setWorkOrderDescription] = useState("");
   const [workOrderFile, setWorkOrderFile] = useState(null);
   const [filters, setFilters] = useState({
-    mentionInPost: "",
-    mentionInDescription: "",
-    repost: "",
-    mentionInContent: "",
+    mentionInPost: 0,
+    mentionInDescription: 0,
+    repost: 0,
+    mentionInContent: 0,
   });
 
   const handleProfileSelect = (profileId) => {
@@ -145,89 +146,45 @@ const CollaborationPage = () => {
 
       {/* Filter Bar */}
       <div className="consultancy-filters">
-        <div className="consultancy-filter">
-          <span className="consultancy-filter-label">Mention in Post</span>
-          <div className="consultancy-select">
-            <select
-              value={filters.mentionInPost}
-              onChange={(e) =>
-                handleFilterChange("mentionInPost", e.target.value)
-              }
-            >
-              <option value="" disabled>
-                Select Value
-              </option>
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-            </select>
-            <span className="consultancy-select-caret">
-              <i className="bi bi-chevron-down"></i>
-            </span>
-          </div>
-        </div>
+        <SliderDropdown
+          label="Mention in Post"
+          placeholder="Select Value"
+          min={0}
+          max={1000000}
+          step={1000}
+          value={filters.mentionInPost}
+          onChange={(value) => handleFilterChange("mentionInPost", value)}
+        />
 
-        <div className="consultancy-filter">
-          <span className="consultancy-filter-label">
-            Mention in description
-          </span>
-          <div className="consultancy-select">
-            <select
-              value={filters.mentionInDescription}
-              onChange={(e) =>
-                handleFilterChange("mentionInDescription", e.target.value)
-              }
-            >
-              <option value="" disabled>
-                Select Value
-              </option>
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-            </select>
-            <span className="consultancy-select-caret">
-              <i className="bi bi-chevron-down"></i>
-            </span>
-          </div>
-        </div>
+        <SliderDropdown
+          label="Mention in description"
+          placeholder="Select Value"
+          min={0}
+          max={1000000}
+          step={1000}
+          value={filters.mentionInDescription}
+          onChange={(value) => handleFilterChange("mentionInDescription", value)}
+        />
 
-        <div className="consultancy-filter">
-          <span className="consultancy-filter-label">Repost</span>
-          <div className="consultancy-select">
-            <select
-              value={filters.repost}
-              onChange={(e) => handleFilterChange("repost", e.target.value)}
-            >
-              <option value="" disabled>
-                Select Value
-              </option>
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-            </select>
-            <span className="consultancy-select-caret">
-              <i className="bi bi-chevron-down"></i>
-            </span>
-          </div>
-        </div>
+        <SliderDropdown
+          label="Repost"
+          placeholder="Select Value"
+          min={0}
+          max={1000000}
+          step={1000}
+          value={filters.repost}
+          onChange={(value) => handleFilterChange("repost", value)}
+        />
 
-        <div className="consultancy-filter">
-          <span className="consultancy-filter-label">Mention in Content</span>
-          <div className="consultancy-select">
-            <select
-              value={filters.mentionInContent}
-              onChange={(e) =>
-                handleFilterChange("mentionInContent", e.target.value)
-              }
-            >
-              <option value="" disabled>
-                Select Value
-              </option>
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-            </select>
-            <span className="consultancy-select-caret">
-              <i className="bi bi-chevron-down"></i>
-            </span>
-          </div>
-        </div>
+        <SliderDropdown
+          label="Mention in Content"
+          placeholder="Select Value"
+          min={0}
+          max={1000000}
+          step={1000}
+          value={filters.mentionInContent}
+          onChange={(value) => handleFilterChange("mentionInContent", value)}
+        />
       </div>
 
       {/* Collaborator Cards */}
