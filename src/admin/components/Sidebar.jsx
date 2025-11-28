@@ -96,11 +96,22 @@ const Sidebar = ({
         setShowPremiumModal(true);
         return;
       }
-      // If item has children, toggle expand/collapse
-      if (hasChildren) {
+      // If item has children and doesn't allow navigation with children, toggle expand/collapse
+      if (hasChildren && !item.navigateWithChildren) {
         e.preventDefault(); // Prevent navigation to allow toggle
         e.stopPropagation(); // Stop event bubbling
         toggleExpanded(item.id); // Always toggle the expanded state
+      }
+      // If item allows navigation with children, close dropdown first, then navigate
+      // The useEffect will handle auto-expanding based on active route
+      if (hasChildren && item.navigateWithChildren) {
+        // Close the dropdown by removing it from expanded items
+        setExpandedItems(prev => {
+          const newExpanded = new Set(prev);
+          newExpanded.delete(item.id);
+          return newExpanded;
+        });
+        // The useEffect will re-expand it if the route is active
       }
     };
 

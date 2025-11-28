@@ -54,11 +54,9 @@ const Home = () => {
               <img src={serviceIcon} className="icon" alt="" />
               <h3>Verified Profile Badge</h3>
               <div className="subtitle">
-                Get a unique ‘Verified Profile’ Badge to add to your online
-                profile in all social media platforms. Equivalent to the ‘blue
-                tick’ at a fraction of the cost over all your social media
-                accounts. This badge is a one-time label showing that you are an
-                authentic and trustworthy user of the site.
+                Get a unique 'Verified Profile' Badge to add to your online
+                profile in all social media platforms. A one-time label showing
+                that you are an authentic and trustworthy user.
               </div>
             </div>
           </div>
@@ -68,10 +66,9 @@ const Home = () => {
               <img src={Icon2} className="icon" alt="" />
               <h3>Profile Registration Number</h3>
               <div className="subtitle">
-                Along with your ‘Verified Profile’ badge, get a registration
+                Along with your 'Verified Profile' badge, get a registration
                 number assigned that can be traced back to a portal listing of
-                all verified registered members. Thus, giving you a legitimate
-                identity over fake and duplicate profiles.
+                all verified registered members.
               </div>
             </div>
           </div>
@@ -89,12 +86,12 @@ const Home = () => {
 
           <div className="hex md" role="img" aria-label="Analytics">
             <div className="hex-content">
-              <img src={Icon4} className="icon" alt="" />
-              <h3>Collaborate</h3>
+              <img src={Icon10} className="icon" alt="" />
+              <h3>Professional Liability Insurance</h3>
               <div className="subtitle">
-                Our most valued service for your growth. Use our repository to
-                connect with like minded creators. Use your credits to request
-                networking opportunities and cross promotion.
+                Safeguard yourself or your company from Legal lawsuits and and
+                protect yourself from financial claims from our varied insurance
+                policy packages to suite your needs.
               </div>
             </div>
           </div>
@@ -117,10 +114,9 @@ const Home = () => {
               <h3>Legal Counsel</h3>
               <div className="subtitle">
                 Get access to experienced and proficient legal team located in
-                your country of origin for any legal advice you might need or to
-                defend or represent you in case of legal liability. They can
-                help drafting contractual obligations and collaborative
-                agreements preparation with legal and strategic advice.
+                your country of origin help drafting contractual obligations and
+                collaborative agreements preparation with legal and strategic
+                advice and representation.
               </div>
             </div>
           </div>
@@ -173,7 +169,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="hex md" role="img" aria-label="Analytics">
+          <div className="hex md d-none" role="img" aria-label="Analytics">
             <div className="hex-content">
               <img src={Icon10} className="icon" alt="" />
               <h3>Professional Liability Insurance</h3>
@@ -187,11 +183,12 @@ const Home = () => {
 
           <div className="hex md" role="img" aria-label="Analytics">
             <div className="hex-content">
-              <img src={serviceIcon} className="icon" alt="" />
-              <h3>Lorem Ipsum</h3>
+              <img src={Icon4} className="icon" alt="" />
+              <h3>Collaborate</h3>
               <div className="subtitle">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                Our most valued service for your growth. Use our repository to
+                connect with like minded creators. Use your credits to request
+                networking opportunities and cross promotion.
               </div>
             </div>
           </div>

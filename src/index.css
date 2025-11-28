@@ -139,16 +139,15 @@
     width: var(--size);
     aspect-ratio: 1/1;
     clip-path: polygon(25% 6.698%, 75% 6.698%, 100% 50%, 75% 93.302%, 25% 93.302%, 0% 50%);
-    background: #fbfbfb;
+    background: #f9f9f9;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #292A2A;
-    transition: transform .18s ease, box-shadow .18s ease;
+    transition: transform .18s ease, box-shadow .18s ease, opacity .3s ease;
     position: relative;
     overflow: hidden;
     border-radius: var(--radius);
-    transform: rotate(30deg);
     cursor: pointer;
     position: absolute;
     z-index: 1;
@@ -168,6 +167,7 @@
     justify-content: flex-start;
     cursor: pointer;
     z-index: 999;
+    opacity: 1;
 }
 
 .hex-content {
@@ -178,7 +178,6 @@
     gap: 12px;
     padding: 0px 12px;
     text-align: center;
-    transform: rotate(-30deg);
     transition: all .25s ease;
 }
 
@@ -194,7 +193,6 @@
 .hex:hover .hex-content {
     align-items: flex-start;
     text-align: left;
-    transform: rotate(0deg);
 }
 
 .hex svg {

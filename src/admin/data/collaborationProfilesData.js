@@ -3,7 +3,7 @@ import consultancyData from './consultancyData';
 export const collaborationProfiles = [
   {
     id: 'suryoday-bank-1',
-    name: 'Suryoday Bank',
+    name: 'Rajesh Kumar',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '869k',
     rating: 4.5,
@@ -22,7 +22,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'suryoday-bank-2',
-    name: 'Suryoday Bank',
+    name: 'Priya Sharma',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '869k',
     rating: 4.5,
@@ -41,7 +41,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'suryoday-bank-3',
-    name: 'Suryoday Bank',
+    name: 'Amit Patel',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '869k',
     rating: 4.5,
@@ -60,7 +60,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-4',
-    name: 'Suryoday Bank',
+    name: 'Sarah Johnson',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '1.2M',
     rating: 4.8,
@@ -79,7 +79,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-5',
-    name: 'Suryoday Bank',
+    name: 'Meera Desai',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '650k',
     rating: 4.6,
@@ -98,7 +98,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-6',
-    name: 'Suryoday Bank',
+    name: 'David Chen',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '950k',
     rating: 4.7,
@@ -117,7 +117,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-7',
-    name: 'Suryoday Bank',
+    name: 'Ananya Reddy',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '780k',
     rating: 4.4,
@@ -136,7 +136,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-8',
-    name: 'Suryoday Bank',
+    name: 'Michael Thompson',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '1.5M',
     rating: 4.9,
@@ -155,7 +155,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-9',
-    name: 'Suryoday Bank',
+    name: 'Kavya Nair',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '1.8M',
     rating: 4.8,
@@ -174,7 +174,7 @@ export const collaborationProfiles = [
   },
   {
     id: 'profile-10',
-    name: 'Suryoday Bank',
+    name: 'James Wilson',
     avatar: consultancyData.legal.professionals[0].avatar,
     reach: '520k',
     rating: 4.3,

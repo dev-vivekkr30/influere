@@ -20,17 +20,31 @@ export const outgoingWorkOrders = [
   {
     id: 'wo-out-1233',
     orderNumber: '1233',
-    profile: collaborationProfiles[0], // Suryoday Bank profile
+    profiles: [
+      collaborationProfiles[0], // Suryoday Bank profile
+      collaborationProfiles[1], // Second profile
+      collaborationProfiles[2], // Third profile
+      collaborationProfiles[3], // Fourth profile
+    ],
   },
   {
     id: 'wo-out-1234',
     orderNumber: '1234',
-    profile: collaborationProfiles[1], // Another Suryoday Bank profile
+    profiles: [
+      collaborationProfiles[4], // Fifth profile
+      collaborationProfiles[5], // Sixth profile
+      collaborationProfiles[6], // Seventh profile
+    ],
   },
   {
     id: 'wo-out-1235',
     orderNumber: '1235',
-    profile: collaborationProfiles[2], // Another Suryoday Bank profile
+    profiles: [
+      collaborationProfiles[7], // Eighth profile
+      collaborationProfiles[8], // Ninth profile
+      collaborationProfiles[9], // Tenth profile
+      collaborationProfiles[0], // Eleventh profile (reusing for variety)
+    ],
   },
 ];
 

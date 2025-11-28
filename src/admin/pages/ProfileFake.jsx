@@ -4,7 +4,7 @@ import fakeProfileRows from "../data/profileFakeData";
 import "./Wallet.css";
 import "./ProfileSell.css";
 
-const platforms = ["Instagram", "Facebook", "Twitter", "YouTube", "TikTok"];
+const platforms = ["Instagram", "Twitter", "YouTube", "TikTok"];
 
 const tabConfig = [
   { id: "report", label: "Outgoing" },
@@ -128,7 +128,7 @@ const ProfileFake = () => {
 
   return (
     <div className="admin-page profile-sell-page">
-      <div className="profile-sell-header">
+      <div className="profile-sell-header mb-3">
         <h1 className="profile-sell-heading">Fake profile</h1>
       </div>
 
@@ -153,7 +153,7 @@ const ProfileFake = () => {
                     className="w-100 form-input-group"
                   >
                     <option value="" disabled>
-                      Value
+                      Facebook
                     </option>
                     {platforms.map((platform) => (
                       <option key={platform} value={platform}>
@@ -495,11 +495,11 @@ const ProfileFake = () => {
                 </div>
               </div>
 
-              <div style={{ marginTop: "-8px", marginBottom: "16px" }}>
+              {/* <div style={{ marginTop: "-8px", marginBottom: "16px" }}>
                 <p style={{ fontSize: "14px", color: "var(--admin-gray-600)", margin: 0 }}>
                   5 credit
                 </p>
-              </div>
+              </div> */}
 
               <div className="modal-footer">
                 <button type="submit" className="btn-dark">

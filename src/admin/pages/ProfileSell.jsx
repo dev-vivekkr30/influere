@@ -21,6 +21,8 @@ const activityRows = [
     userName: "Sonam Kapoor",
     userEmail: "sonam@gmail.com",
     amount: "$220k",
+    minAmount: "$200k",
+    maxAmount: "$300k",
     status: "pending",
   },
   {
@@ -154,7 +156,11 @@ const ProfileSell = () => {
                         <span className="table-username">{row.userEmail}</span>
                       </div>
                     </td>
-                    <td className="table-amount">{row.amount}</td>
+                    <td className="table-amount">
+                      {activeTab === "pending" && row.status === "pending" && row.minAmount && row.maxAmount
+                        ? `${row.minAmount} - ${row.maxAmount}`
+                        : row.amount}
+                    </td>
                     <td>
                       <div className="dropdown">
                         <button

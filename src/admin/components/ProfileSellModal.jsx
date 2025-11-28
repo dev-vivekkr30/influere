@@ -15,10 +15,10 @@ const SLIDER_MAX = 1000;
 const ProfileSellModal = ({ show, onClose }) => {
   const [platform, setPlatform] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
-  const [minAmount, setMinAmount] = useState("");
-  const [maxAmount, setMaxAmount] = useState("");
   const [minSliderValue, setMinSliderValue] = useState(300);
   const [maxSliderValue, setMaxSliderValue] = useState(700);
+  const [minAmount, setMinAmount] = useState("$300");
+  const [maxAmount, setMaxAmount] = useState("$700");
 
   const minSliderProgress = useMemo(() => {
     return ((minSliderValue - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * 100;

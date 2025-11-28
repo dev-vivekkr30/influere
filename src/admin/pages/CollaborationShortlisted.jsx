@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import { collaborationProfiles } from "../data/collaborationProfilesData";
@@ -24,6 +24,8 @@ const CollaborationShortlisted = () => {
   const tabParam = searchParams.get("tab");
   const [activeTab, setActiveTab] = useState(tabParam || "incoming");
   const [expandedAccordions, setExpandedAccordions] = useState(new Set());
+  const [selectedCards, setSelectedCards] = useState(new Set());
+  const isProgrammaticUpdate = useRef(false);
   const [showAuctionInfluencerModal, setShowAuctionInfluencerModal] = useState(false);
   const [showAuctionCollaboratorModal, setShowAuctionCollaboratorModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState("$500");
@@ -86,6 +88,21 @@ const CollaborationShortlisted = () => {
       setSelectedOutgoingOrder(outgoingOrderNumbers[0]);
     }
   }, [activeTab, selectedOutgoingOrder, outgoingOrderNumbers.length]);
+
+  // Sync setupBidBetween checkbox state with selected cards for current work order
+  useEffect(() => {
+    if (activeTab === "outgoing" && selectedOutgoingOrder && !isProgrammaticUpdate.current) {
+      const currentWorkOrder = filteredOutgoingWorkOrders.find(
+        wo => wo.orderNumber === selectedOutgoingOrder
+      );
+      if (currentWorkOrder) {
+        const profiles = currentWorkOrder.profiles || (currentWorkOrder.profile ? [currentWorkOrder.profile] : []);
+        const cardIds = profiles.map((_, index) => `${currentWorkOrder.id}-${index}`);
+        const allSelected = cardIds.length > 0 && cardIds.every(id => selectedCards.has(id));
+        setSetupBidBetween(allSelected);
+      }
+    }
+  }, [selectedCards, selectedOutgoingOrder, filteredOutgoingWorkOrders, activeTab]);
 
   const toggleAccordion = (workOrderId) => {
     const newExpanded = new Set(expandedAccordions);
@@ -522,7 +539,45 @@ const CollaborationShortlisted = () => {
                   <input
                     type="checkbox"
                     checked={setupBidBetween}
-                    onChange={(e) => setSetupBidBetween(e.target.checked)}
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      isProgrammaticUpdate.current = true;
+                      setSetupBidBetween(isChecked);
+                      
+                      // Select/deselect all cards for the current work order
+                      if (isChecked) {
+                        // Get all card IDs for the current work order
+                        const currentWorkOrder = filteredOutgoingWorkOrders.find(
+                          wo => wo.orderNumber === selectedOutgoingOrder
+                        );
+                        if (currentWorkOrder) {
+                          const profiles = currentWorkOrder.profiles || (currentWorkOrder.profile ? [currentWorkOrder.profile] : []);
+                          const cardIds = profiles.map((_, index) => `${currentWorkOrder.id}-${index}`);
+                          setSelectedCards(prev => {
+                            const newSet = new Set(prev);
+                            cardIds.forEach(id => newSet.add(id));
+                            return newSet;
+                          });
+                        }
+                      } else {
+                        // Deselect all cards for the current work order
+                        const currentWorkOrder = filteredOutgoingWorkOrders.find(
+                          wo => wo.orderNumber === selectedOutgoingOrder
+                        );
+                        if (currentWorkOrder) {
+                          const profiles = currentWorkOrder.profiles || (currentWorkOrder.profile ? [currentWorkOrder.profile] : []);
+                          const cardIds = profiles.map((_, index) => `${currentWorkOrder.id}-${index}`);
+                          setSelectedCards(prev => {
+                            const newSet = new Set(prev);
+                            cardIds.forEach(id => newSet.delete(id));
+                            return newSet;
+                          });
+                        }
+                      }
+                      setTimeout(() => {
+                        isProgrammaticUpdate.current = false;
+                      }, 0);
+                    }}
                   />
                   <span>Setup bid between shortlisted results</span>
                 </label>
@@ -546,24 +601,42 @@ const CollaborationShortlisted = () => {
               {/* Cards List - Same as Incoming */}
               <div className="shortlisted-cards-list">
                 {filteredOutgoingWorkOrders.map((workOrder) => {
-                  const profile = workOrder.profile;
-                  if (!profile) return null;
-
-                  const isAccordionExpanded = expandedAccordions.has(
-                    workOrder.id
-                  );
+                  const profiles = workOrder.profiles || (workOrder.profile ? [workOrder.profile] : []);
+                  if (!profiles || profiles.length === 0) return null;
 
                   return (
                     <div
                       key={workOrder.id}
                       className="shortlisted-work-order-group"
                     >
-                      {/* Card - Same structure as Incoming */}
-                      <div className={`shortlisted-card-full ${isAccordionExpanded ? "accordion-expanded" : ""}`}>
+                      {profiles.map((profile, profileIndex) => {
+                        const cardId = `${workOrder.id}-${profileIndex}`;
+                        const isAccordionExpanded = expandedAccordions.has(cardId);
+
+                        return (
+                          <div
+                            key={cardId}
+                            className={`shortlisted-card-full ${isAccordionExpanded ? "accordion-expanded" : ""}`}
+                          >
                         <div className="shortlisted-card-header w-100 d-flex align-items-center justify-content-between">
                           <div className="d-flex align-items-center gap-2">
                             <div className="shortlisted-card-checkbox">
-                              <input type="checkbox" />
+                              <input 
+                                type="checkbox" 
+                                checked={selectedCards.has(cardId)}
+                                onChange={(e) => {
+                                  const isChecked = e.target.checked;
+                                  setSelectedCards(prev => {
+                                    const newSet = new Set(prev);
+                                    if (isChecked) {
+                                      newSet.add(cardId);
+                                    } else {
+                                      newSet.delete(cardId);
+                                    }
+                                    return newSet;
+                                  });
+                                }}
+                              />
                             </div>
                             <div className="consultancy-avatar">
                               <img src={profile.avatar} alt={profile.name} />
@@ -662,7 +735,7 @@ const CollaborationShortlisted = () => {
                             <button
                               type="button"
                               className="more-actions-btn btn-light"
-                              onClick={() => toggleAccordion(workOrder.id)}
+                              onClick={() => toggleAccordion(cardId)}
                             >
                               More Actions
                               <i
@@ -869,6 +942,8 @@ const CollaborationShortlisted = () => {
                           </div>
                         )}
                       </div>
+                      );
+                    })}
                     </div>
                   );
                 })}

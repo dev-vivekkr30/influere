@@ -7,6 +7,7 @@ import { collaborationProfiles } from "../data/collaborationProfilesData";
 import "../components/ConsultancyModals.css";
 import "./ConsultancyCategoryPage.css";
 import "./CollaborationPage.css";
+import "./CollaborationShortlisted.css";
 import "./Wallet.css";
 import "./ProfileSell.css";
 
@@ -40,10 +41,12 @@ const ProfileBuy = () => {
   const [selectedActionRow, setSelectedActionRow] = useState(null);
   const [filterValues, setFilterValues] = useState({
     socialMediaPlatform: '',
+    areaOfInterest: '',
     followers: '',
     posts: '',
     revenueRange: 100,
   });
+  const [sortBy, setSortBy] = useState("price-low-to-high");
 
   const counts = useMemo(() => ({
     all: buyProfileRows.length,
@@ -99,6 +102,26 @@ const ProfileBuy = () => {
       placeholder: 'Select',
       type: 'dropdown',
       options: ['Facebook', 'Instagram', 'YouTube', 'Twitter', 'Tiktok'],
+    },
+    {
+      id: 'areaOfInterest',
+      label: 'Area of Interest',
+      placeholder: 'Select',
+      type: 'dropdown',
+      options: [
+        'Technology & Software',
+        'Fashion & Beauty',
+        'Health & Fitness',
+        'Food & Travel',
+        'Business & Entrepreneurship',
+        'Gaming & Esports',
+        'Lifestyle & Home',
+        'Education & Learning',
+        'Entertainment & Comedy',
+        'Sports & Athletics',
+        'Music & Arts',
+        'Finance & Investment',
+      ],
     },
     {
       id: 'followers',
@@ -179,6 +202,24 @@ const ProfileBuy = () => {
         {filters.map(renderFilter)}
       </div>
 
+      <div className="outgoing-actions-bar border-0 justify-content-end" style={{ marginTop: '4px', marginBottom: '4px' }}>
+        <div className="sort-by-filter">
+          <label className="sort-by-label">Sort By:</label>
+          <select
+            className="sort-by-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="price-low-to-high">Price Low to High</option>
+            <option value="price-high-to-low">Price High to Low</option>
+            <option value="name-a-z">Name A-Z</option>
+            <option value="name-z-a">Name Z-A</option>
+            <option value="reach-high-to-low">Reach High to Low</option>
+            <option value="reach-low-to-high">Reach Low to High</option>
+          </select>
+        </div>
+      </div>
+
       <div className="consultancy-grid">
         {collaborationProfiles.map((profile) => (
           <div
@@ -236,11 +277,22 @@ const ProfileBuy = () => {
             </div>
 
             <p className="consultancy-card-summary">{profile.summary}</p>
+
+            <button
+              type="button"
+              className="consultancy-card-button dark-btn"
+              onClick={(event) => {
+                event.stopPropagation();
+                // Handle buy profile action
+              }}
+            >
+              Buy Profile
+            </button>
           </div>
         ))}
       </div>
 
-      <div className="dashboard-table-section">
+      <div className="dashboard-table-section mt-4">
         <div className="table-header">
           <h2 className="table-title mb-0">Activity</h2>
           <div className="dropdown">
